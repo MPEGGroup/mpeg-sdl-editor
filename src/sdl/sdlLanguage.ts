@@ -1,7 +1,7 @@
 import { LRParser as LezerParser } from "@lezer/lr";
 import { type Extension } from "@codemirror/state";
 import { styleTags, tags as t } from "@lezer/highlight";
-import { createLenientSdlParser } from "@flowscripter/mpeg-sdl-parser";
+import { createLenientSdlParser } from "@mpeggroup/mpeg-sdl-parser";
 import {
   foldNodeProp,
   LanguageSupport,

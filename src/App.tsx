@@ -1,4 +1,4 @@
-import { SyntacticParseError } from "@flowscripter/mpeg-sdl-parser";
+import { SyntacticParseError } from "@mpeggroup/mpeg-sdl-parser";
 import { Editor } from "./components/Editor";
 import type { EditorRef } from "./components/Editor";
 import { Navbar } from "./components/Navbar";
