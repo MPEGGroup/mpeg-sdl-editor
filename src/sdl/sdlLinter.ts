@@ -2,7 +2,7 @@ import { syntaxTree } from "@codemirror/language";
 import { type Diagnostic, linter } from "@codemirror/lint";
 import { type SyntaxNodeRef } from "@lezer/common";
 import { type Extension } from "@codemirror/state";
-import { SyntacticParseError } from "@flowscripter/mpeg-sdl-parser";
+import { SyntacticParseError } from "@mpeggroup/mpeg-sdl-parser";
 
 interface SdlLinterOptions {
   onParseErrorChange: (syntacticParseErrors: SyntacticParseError[]) => void;

@@ -15,7 +15,7 @@ import {
 } from "@codemirror/language";
 import { vscodeDarkInit, vscodeLightInit } from "@uiw/codemirror-theme-vscode";
 import { EditorView } from "@codemirror/view";
-import { SyntacticParseError } from "@flowscripter/mpeg-sdl-parser";
+import { SyntacticParseError } from "@mpeggroup/mpeg-sdl-parser";
 export { ViewUpdate } from "@codemirror/view";
 import { lintGutter } from "@codemirror/lint";
 import { sdl } from "../sdl/sdlLanguage";

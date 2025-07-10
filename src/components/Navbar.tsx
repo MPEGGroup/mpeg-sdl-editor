@@ -27,9 +27,9 @@ export function Navbar({
 
   return (
     <div className="navbar bg-base-200 py-0.5 px-2 min-h-10">
-      <div className="flex-1">
+      <div className="flex-1 flex items-center">
         <h1 className="text-sm sm:text-base md:text-lg font-semibold truncate">
-          MPEG SDL Editor
+          SDL Editor
         </h1>
       </div>
       <div className="flex-none">

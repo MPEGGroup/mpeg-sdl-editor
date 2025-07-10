@@ -3,3 +3,6 @@ plugins = ["bun-plugin-tailwind"]
 
 [test]
 preload = "./tests/happydom.ts"
+
+[install.scopes]
+"@mpeggroup" = { url = "https://npm.pkg.github.com/", token = "$NPM_TOKEN" }
