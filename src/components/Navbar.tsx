@@ -1,5 +1,8 @@
 import React, { useRef } from "react";
 import type { Theme } from "../hooks/useTheme";
+import { getLogoSvg } from "../logo/getLogoSvg";
+
+const logoSvg = getLogoSvg();
 
 interface NavbarProps {
   theme: Theme;
@@ -26,9 +29,13 @@ export function Navbar({
   };
 
   return (
-    <div className="navbar bg-base-200 py-0.5 px-2 min-h-10">
+    <div className="navbar bg-base-200 py-2 pl-0 pr-2 min-h-14">
       <div className="flex-1 flex items-center">
-        <h1 className="text-sm sm:text-base md:text-lg font-semibold truncate">
+        <div
+          className="h-6 sm:h-8 md:h-10 w-auto mr-2 -ml-2 [&_svg]:h-6 [&_svg]:sm:h-8 [&_svg]:md:h-10 [&_svg]:w-auto"
+          dangerouslySetInnerHTML={{ __html: logoSvg }}
+        />
+        <h1 className="text-sm sm:text-base md:text-lg font-semibold truncate -ml-3 -mt-1">
           SDL Editor
         </h1>
       </div>
