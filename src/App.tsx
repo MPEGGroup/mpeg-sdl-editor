@@ -91,8 +91,8 @@ export function App() {
         onSave={handleSave}
         onLoad={handleLoad}
         onToggleTheme={toggleTheme}
-        onToggleInfo={toggleInfo}
-        isInfoShown={isInfoShown}
+        _onToggleInfo={toggleInfo}
+        _isInfoShown={isInfoShown}
       />
       <div className="flex-grow overflow-hidden" data-testid="main-content">
         <ResizableLayout
