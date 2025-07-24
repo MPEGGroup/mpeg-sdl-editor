@@ -12,6 +12,13 @@ Go to: https://mpeggroup.github.io/mpeg-sdl-editor/
 
 ## Development
 
+`@mpeggroup/mpeg-sdl-parser` is hosted on GitHub packages, so before installing
+dependencies, authentication needs to be configured. Create a GitHub classic
+personal access token which has permission to read packages and then set it in
+your environment:
+
+`export NPM_GITHUB_TOKEN=<your_classic_pat>`
+
 Install dependencies:
 
 `bun install`

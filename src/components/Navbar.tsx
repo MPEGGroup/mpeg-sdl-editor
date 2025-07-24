@@ -10,8 +10,8 @@ interface NavbarProps {
   onCopy: () => void;
   onSave: () => void;
   onLoad: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onToggleInfo: () => void;
-  isInfoShown: boolean;
+  _onToggleInfo: () => void;
+  _isInfoShown: boolean;
 }
 
 export function Navbar({
@@ -20,8 +20,8 @@ export function Navbar({
   onCopy,
   onSave,
   onLoad,
-  onToggleInfo,
-  isInfoShown,
+  _onToggleInfo,
+  _isInfoShown,
 }: NavbarProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const handleLoadClick = () => {
@@ -151,6 +151,8 @@ export function Navbar({
                 )}
             </button>
           </li>
+          {
+            /* TODO: enable when info panel is implemented
           <li>
             <button
               type="button"
@@ -222,7 +224,8 @@ export function Navbar({
                   </svg>
                 )}
             </button>
-          </li>
+          </li> */
+          }
         </ul>
       </div>
     </div>
