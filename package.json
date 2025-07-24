@@ -36,7 +36,7 @@
   "dependencies": {
     "@lezer/common": "^1.2.3",
     "@lezer/highlight": "^1.2.1",
-    "@mpeggroup/mpeg-sdl-parser": "^1.0.6",
+    "@mpeggroup/mpeg-sdl-parser": "^1.0.7",
     "@types/wicg-file-system-access": "^2023.10.6",
     "@uiw/codemirror-theme-vscode": "^4.24.1",
     "@uiw/react-codemirror": "4.24.1",
