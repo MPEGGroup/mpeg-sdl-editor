@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { render } from "@testing-library/react";
-import { Editor } from "../src/components/Editor";
+import { Editor } from "../src/components/Editor.tsx";
 
 describe("Editor component", () => {
   test("renders with initial value", () => {

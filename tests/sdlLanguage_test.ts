@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { createParser } from "../src/sdl/sdlLanguage";
+import { createParser } from "../src/sdl/sdlLanguage.ts";
 
 describe("sdlLanguage", () => {
   test("parses valid SDL without error", () => {

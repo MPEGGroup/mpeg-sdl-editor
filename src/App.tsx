@@ -1,17 +1,17 @@
 import { SyntacticParseError } from "@mpeggroup/mpeg-sdl-parser";
-import { Editor } from "./components/Editor";
-import type { EditorRef } from "./components/Editor";
-import { Navbar } from "./components/Navbar";
-import { SubNav } from "./components/SubNav";
-import { InfoArea } from "./components/InfoArea";
-import { StatusBar } from "./components/StatusBar";
-import { ResizableLayout } from "./components/ResizableLayout";
-import { useToast } from "./hooks/useToast";
-import { useFileOperations } from "./hooks/useFileOperations";
-import { useTheme } from "./hooks/useTheme";
-import { usePrettier } from "./hooks/usePrettier";
+import { Editor } from "./components/Editor.tsx";
+import type { EditorRef } from "./components/Editor.tsx";
+import { Navbar } from "./components/Navbar.tsx";
+import { SubNav } from "./components/SubNav.tsx";
+import { InfoArea } from "./components/InfoArea.tsx";
+import { StatusBar } from "./components/StatusBar.tsx";
+import { ResizableLayout } from "./components/ResizableLayout.tsx";
+import { useToast } from "./hooks/useToast.ts";
+import { useFileOperations } from "./hooks/useFileOperations.ts";
+import { useTheme } from "./hooks/useTheme.ts";
+import { usePrettier } from "./hooks/usePrettier.ts";
 import { useCallback, useMemo, useRef, useState } from "react";
-import { useMobileDetection } from "./hooks/useMobileDetection";
+import { useMobileDetection } from "./hooks/useMobileDetection.ts";
 
 export function App() {
   const [toastState, showToast] = useToast();

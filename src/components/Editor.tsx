@@ -18,9 +18,9 @@ import { EditorView } from "@codemirror/view";
 import { SyntacticParseError } from "@mpeggroup/mpeg-sdl-parser";
 export { ViewUpdate } from "@codemirror/view";
 import { lintGutter } from "@codemirror/lint";
-import { sdl } from "../sdl/sdlLanguage";
-import { sdlLinter } from "../sdl/sdlLinter";
-import { ruler } from "../codemirror/ruler";
+import { sdl } from "../sdl/sdlLanguage.ts";
+import { sdlLinter } from "../sdl/sdlLinter.ts";
+import { ruler } from "../codemirror/ruler.ts";
 
 const darkTheme = vscodeDarkInit({ settings: { fontSize: "11px" } });
 const lightTheme = vscodeLightInit({ settings: { fontSize: "11px" } });

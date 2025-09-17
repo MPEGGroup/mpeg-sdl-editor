@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import type { ShowToastFunction } from "./useToast";
+import type { ShowToastFunction } from "./useToast.ts";
 
 interface UseFileOperationsProps {
   initialCode: string;
