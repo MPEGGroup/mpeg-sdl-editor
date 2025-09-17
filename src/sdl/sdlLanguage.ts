@@ -7,7 +7,7 @@ import {
   LanguageSupport,
   LRLanguage,
 } from "@codemirror/language";
-import { sdlComplete } from "./sdlComplete";
+import { sdlComplete } from "./sdlComplete.ts";
 
 export function createParser(): LezerParser {
   const parser = createLenientSdlParser();

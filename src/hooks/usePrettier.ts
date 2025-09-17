@@ -1,7 +1,7 @@
 import { useCallback, useRef } from "react";
 import prettier from "prettier";
 import { prettierPluginSdl } from "@mpeggroup/mpeg-sdl-parser";
-import type { ShowToastFunction } from "./useToast";
+import type { ShowToastFunction } from "./useToast.ts";
 
 interface UsePrettierProps {
   code: string;

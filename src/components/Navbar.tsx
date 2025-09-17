@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
-import type { Theme } from "../hooks/useTheme";
-import { getLogoSvg } from "../logo/getLogoSvg";
+import type { Theme } from "../hooks/useTheme.ts";
+import { getLogoSvg } from "../logo/getLogoSvg.ts";
 
 const logoSvg = getLogoSvg();
 

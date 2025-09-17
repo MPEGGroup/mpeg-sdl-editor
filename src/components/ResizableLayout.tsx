@@ -1,8 +1,8 @@
 import React, { useCallback, useRef, useState } from "react";
-import { useDragResize } from "../hooks/useDragResize";
-import { MobileDrawer } from "./MobileDrawer";
-import { DesktopPanels } from "./DesktopPanels";
-import type { Theme } from "../hooks/useTheme";
+import { useDragResize } from "../hooks/useDragResize.ts";
+import { MobileDrawer } from "./MobileDrawer.tsx";
+import { DesktopPanels } from "./DesktopPanels.tsx";
+import type { Theme } from "../hooks/useTheme.ts";
 
 interface ResizableLayoutProps {
   children: [React.ReactNode, React.ReactNode];
