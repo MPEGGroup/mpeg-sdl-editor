@@ -40,7 +40,7 @@
     "@types/wicg-file-system-access": "^2023.10.6",
     "@uiw/codemirror-theme-vscode": "^4.25.2",
     "@uiw/react-codemirror": "4.25.2",
-    "daisyui": "^5.1.14",
+    "daisyui": "^5.1.18",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "tailwindcss": "^4.1.13"
