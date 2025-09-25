@@ -51,7 +51,7 @@ export function Navbar({
             <button
               type="button"
               onClick={onCopy}
-              title="Copy"
+              title="Copy All"
               className="[&_svg]:w-6 [&_svg]:h-6"
             >
               <svg
