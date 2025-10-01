@@ -120,7 +120,6 @@ function previousTokenIsOneOf(node: SyntaxNode, tokenNames: string[]): boolean {
       currentNode = currentNode.prevSibling;
       continue;
     }
-    console.error("currentNode", currentNode.name);
     return (tokenNames.includes(currentNode.type.name));
   }
 
@@ -193,7 +192,6 @@ function isSwitchScopeCompletion(lastNode: SyntaxNode): boolean {
 function isCaseClauseCompletion(lastNode: SyntaxNode): boolean {
   // see if the parent of the last node is a case clause
   const parentNode = lastNode.parent;
-  console.error("lastNode ", lastNode.name, "parentNode", parentNode?.name);
   return ((parentNode?.type.name === "SwitchStatement") ||
     (parentNode?.type.name === "CaseClause")) &&
     previousTokenIsOneOf(lastNode, [

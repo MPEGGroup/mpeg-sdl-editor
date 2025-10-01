@@ -11,9 +11,17 @@ import {
   ensureSyntaxTree,
   foldAll,
   foldGutter,
+  LanguageSupport,
+  type TagStyle,
   unfoldAll,
 } from "@codemirror/language";
-import { vscodeDarkInit, vscodeLightInit } from "@uiw/codemirror-theme-vscode";
+import { classHighlighter, highlightCode } from "@lezer/highlight";
+import {
+  vscodeDarkInit,
+  vscodeDarkStyle,
+  vscodeLightInit,
+  vscodeLightStyle,
+} from "@uiw/codemirror-theme-vscode";
 import { EditorView } from "@codemirror/view";
 import { SyntacticParseError } from "@mpeggroup/mpeg-sdl-parser";
 export { ViewUpdate } from "@codemirror/view";
@@ -22,12 +30,17 @@ import { sdl } from "../sdl/sdlLanguage.ts";
 import { sdlLinter } from "../sdl/sdlLinter.ts";
 import { ruler } from "../codemirror/ruler.ts";
 
+type TagWithNameAndModified = {
+  name: string | undefined;
+  modified: Array<unknown>;
+};
+
 const darkTheme = vscodeDarkInit({ settings: { fontSize: "11px" } });
 const lightTheme = vscodeLightInit({ settings: { fontSize: "11px" } });
 
 interface EditorProps {
-  value: string;
-  onCodeChange: (value: string) => void;
+  code: string;
+  onCodeChange: (code: string) => void;
   onCursorChange: (position: { line: number; col: number }) => void;
   onParseErrorChange: (syntacticParseErrors: SyntacticParseError[]) => void;
   theme: "light" | "dark";
@@ -36,55 +49,180 @@ interface EditorProps {
 export interface EditorRef {
   expandAll: () => void;
   collapseAll: () => void;
+  getStyledCode: () => string;
+}
+
+function extractThemeStyleAttributes(themeStyle: TagStyle[]) {
+  const styleAttributesByTagName = new Map<string, string>();
+
+  themeStyle.forEach((style: TagStyle) => {
+    let attributes = "";
+
+    Object.keys(style).forEach((key) => {
+      if ((key !== "tag") && (key !== "class")) {
+        const value = style[key as keyof typeof style];
+
+        if (typeof value === "string") {
+          attributes += `${key}: ${value};`;
+        }
+      }
+    });
+
+    if (attributes.length === 0) {
+      return;
+    }
+
+    if (style.tag instanceof Array) {
+      style.tag.forEach((tag) => {
+        const actualTag = tag as unknown as TagWithNameAndModified;
+
+        if (actualTag.name && (actualTag.modified.length === 0)) {
+          styleAttributesByTagName.set(actualTag.name, attributes);
+        }
+      });
+    } else {
+      const actualTag = style.tag as unknown as TagWithNameAndModified;
+
+      if (actualTag.name && (actualTag.modified.length === 0)) {
+        styleAttributesByTagName.set(actualTag.name, attributes);
+      }
+    }
+  });
+
+  return styleAttributesByTagName;
+}
+
+const lightStyleAttributesByTagName = extractThemeStyleAttributes(
+  vscodeLightStyle,
+);
+const darkStyleAttributesByTagName = extractThemeStyleAttributes(
+  vscodeDarkStyle,
+);
+
+function getStyledCode(
+  sdlLanguageSupport: LanguageSupport,
+  code: string,
+  theme: string,
+): string {
+  const styleAttributesByTagName = theme === "dark"
+    ? darkStyleAttributesByTagName
+    : lightStyleAttributesByTagName;
+
+  let richText = "";
+
+  function emitSpan(text: string, classes: string | undefined) {
+    let spanStyleAttributes;
+
+    if (classes) {
+      let tagName = classes;
+
+      if (classes?.startsWith("tok-")) {
+        // If classes starts with "tok-" it is a class added by classHighlighter
+        tagName = classes.substring(4);
+      }
+
+      const styleAttributes = styleAttributesByTagName.get(tagName);
+
+      if (styleAttributes) {
+        spanStyleAttributes = styleAttributes;
+      }
+    }
+
+    const textNode = document.createTextNode(text);
+    const p = document.createElement("p");
+
+    p.appendChild(textNode);
+
+    let span;
+    if (spanStyleAttributes) {
+      span = "<span style='" + spanStyleAttributes + "'>" +
+        p.innerHTML.replaceAll(" ", "&nbsp;") +
+        "</span>";
+    } else {
+      span = "<span>" + p.innerHTML.replaceAll(" ", "&nbsp;") + "</span>";
+    }
+    richText += span;
+  }
+
+  function emitBreak() {
+    richText += "<br>";
+  }
+
+  highlightCode(
+    code,
+    sdlLanguageSupport.language.parser.parse(code),
+    classHighlighter,
+    emitSpan,
+    emitBreak,
+  );
+
+  return `<span style="font-family: monospace">${richText}</span>`;
 }
 
 export const Editor = forwardRef<EditorRef, EditorProps>(
-  ({ value, onCodeChange, onCursorChange, onParseErrorChange, theme }, ref) => {
+  ({ code, onCodeChange, onCursorChange, onParseErrorChange, theme }, ref) => {
     const lastCursorPosition = useRef({ line: 1, col: 1 });
     const editorViewRef = useRef<EditorView | null>(null);
 
-    const extensions = useMemo(() => {
-      const ext = [
-        codeFolding(),
-        foldGutter(),
-        sdl(),
-        sdlLinter({ onParseErrorChange }),
-        lintGutter(),
-        ruler(80),
-      ];
-      return ext;
-    }, [onParseErrorChange]);
+    const sdlLanguageSupport = useMemo(() => sdl(), []);
+
+    // Memoize static extensions that never change
+    const staticExtensions = useMemo(() => [
+      codeFolding(),
+      foldGutter(),
+      lintGutter(),
+      ruler(80),
+    ], []);
+
+    // Memoize dynamic extensions that depend on props
+    const dynamicExtensions = useMemo(() => [
+      sdlLinter({ onParseErrorChange }),
+    ], [onParseErrorChange]);
+
+    const extensions = useMemo(() => [
+      ...staticExtensions,
+      sdlLanguageSupport,
+      ...dynamicExtensions,
+    ], [staticExtensions, sdlLanguageSupport, dynamicExtensions]);
+
+    // Memoize imperative methods
+    const expandAll = useCallback(() => {
+      if (editorViewRef.current) {
+        const view = editorViewRef.current;
+        const state = view.state;
+
+        view.dispatch({});
+
+        ensureSyntaxTree(view.state, state.doc.length, 5000);
+
+        unfoldAll(view);
+      }
+    }, []);
+
+    const collapseAll = useCallback(() => {
+      if (editorViewRef.current) {
+        const view = editorViewRef.current;
+        const state = view.state;
+
+        view.dispatch({});
+
+        ensureSyntaxTree(view.state, state.doc.length, 5000);
+
+        foldAll(view);
+      }
+    }, []);
 
     // Expose methods via ref
     useImperativeHandle(ref, () => ({
-      expandAll: () => {
-        if (editorViewRef.current) {
-          const view = editorViewRef.current;
-          const state = view.state;
-
-          view.dispatch({});
-
-          ensureSyntaxTree(view.state, state.doc.length, 5000);
-
-          unfoldAll(view);
-        }
+      expandAll,
+      collapseAll,
+      getStyledCode: () => {
+        return getStyledCode(sdlLanguageSupport, code, theme);
       },
-      collapseAll: () => {
-        if (editorViewRef.current) {
-          const view = editorViewRef.current;
-          const state = view.state;
+    }), [expandAll, collapseAll, sdlLanguageSupport, code, theme]);
 
-          view.dispatch({});
-
-          ensureSyntaxTree(view.state, state.doc.length, 5000);
-
-          foldAll(view);
-        }
-      },
-    }), []);
-
-    const onInternalCodeChange = useCallback((val: string) => {
-      onCodeChange(val);
+    const onInternalCodeChange = useCallback((code: string) => {
+      onCodeChange(code);
     }, [onCodeChange]);
 
     const onViewUpdate = useCallback((viewUpdate: ViewUpdate) => {
@@ -114,7 +252,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
     return (
       <div className="h-full w-full">
         <CodeMirror
-          value={value}
+          value={code}
           theme={theme === "dark" ? darkTheme : lightTheme}
           width="100%"
           height="100%"

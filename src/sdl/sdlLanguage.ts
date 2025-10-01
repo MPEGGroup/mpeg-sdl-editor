@@ -1,5 +1,4 @@
 import { LRParser as LezerParser } from "@lezer/lr";
-import { type Extension } from "@codemirror/state";
 import { styleTags, tags as t } from "@lezer/highlight";
 import { createLenientSdlParser } from "@mpeggroup/mpeg-sdl-parser";
 import {
@@ -118,6 +117,6 @@ export const sdlCompletion = sdlLanguage.data.of({
   autocomplete: sdlComplete,
 });
 
-export function sdl(): Extension {
+export function sdl(): LanguageSupport {
   return new LanguageSupport(sdlLanguage, [sdlCompletion]);
 }

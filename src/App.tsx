@@ -14,6 +14,9 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { useMobileDetection } from "./hooks/useMobileDetection.ts";
 
 export function App() {
+  const initialCode = "// Start typing your SDL here...\n";
+
+  const [code, setCode] = useState<string>(initialCode);
   const [toastState, showToast] = useToast();
   const { theme, toggleTheme } = useTheme();
   const isMobile = useMobileDetection();
@@ -36,14 +39,14 @@ export function App() {
     [],
   );
   const {
-    code,
-    setCode,
     handleSave,
     handleLoad,
     handleCopy,
   } = useFileOperations({
-    initialCode: "// Start typing your SDL here...\n",
+    code,
+    setCode,
     showToast,
+    editorRef,
   });
 
   const lineCount = useMemo(() => code.split("\n").length, [code]);
@@ -111,7 +114,7 @@ export function App() {
             <div className="flex-grow overflow-auto">
               <Editor
                 ref={editorRef}
-                value={code}
+                code={code}
                 onCodeChange={setCode}
                 onCursorChange={onCursorChange}
                 onParseErrorChange={onParseErrorChange}
