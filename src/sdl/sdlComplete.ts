@@ -120,7 +120,6 @@ function previousTokenIsOneOf(node: SyntaxNode, tokenNames: string[]): boolean {
       currentNode = currentNode.prevSibling;
       continue;
     }
-    console.error("currentNode", currentNode.name);
     return (tokenNames.includes(currentNode.type.name));
   }
 

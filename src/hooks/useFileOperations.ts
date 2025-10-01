@@ -1,16 +1,17 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import type { ShowToastFunction } from "./useToast.ts";
+import type { EditorRef } from "../components/Editor.tsx";
 
 interface UseFileOperationsProps {
-  initialCode: string;
+  code: string;
+  setCode: (code: string) => void;
   showToast: ShowToastFunction;
+  editorRef: React.RefObject<EditorRef | null>;
 }
 
 export function useFileOperations(
-  { initialCode, showToast }: UseFileOperationsProps,
+  { code, setCode, showToast, editorRef }: UseFileOperationsProps,
 ) {
-  const [code, setCode] = useState<string>(initialCode);
-
   const handleSave = useCallback(async () => {
     try {
       if (globalThis.window.showSaveFilePicker) {
@@ -74,10 +75,24 @@ export function useFileOperations(
 
   const handleCopy = useCallback(async () => {
     try {
-      await navigator.clipboard.writeText(code);
+      const clipboardItems: Record<string, Blob> = {
+        "text/plain": new Blob([code], { type: "text/plain" }),
+      };
+
+      if (editorRef.current?.getStyledCode) {
+        const styledCode = editorRef.current.getStyledCode();
+
+        clipboardItems["text/html"] = new Blob([styledCode], {
+          type: "text/html",
+        });
+      }
+
+      const clipboardItem = new ClipboardItem(clipboardItems);
+
+      await navigator.clipboard.write([clipboardItem]);
       showToast("Content copied to clipboard!");
     } catch (err) {
-      console.error("Failed to copy text: ", err);
+      console.error("Failed to copy content: ", err);
       showToast("Failed to copy content. See console.", "error");
     }
   }, [code, showToast]);

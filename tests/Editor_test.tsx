@@ -6,7 +6,7 @@ describe("Editor component", () => {
   test("renders with initial value", () => {
     const { getAllByRole } = render(
       <Editor
-        value="int a;"
+        code="int a;"
         onCodeChange={() => {}}
         onCursorChange={() => {}}
         onParseErrorChange={() => {}}
