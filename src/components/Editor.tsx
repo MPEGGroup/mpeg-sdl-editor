@@ -30,7 +30,10 @@ import { sdl } from "../sdl/sdlLanguage.ts";
 import { sdlLinter } from "../sdl/sdlLinter.ts";
 import { ruler } from "../codemirror/ruler.ts";
 
-type TagWithNameAndModified = { name: string | undefined; modified: Array<unknown> };
+type TagWithNameAndModified = {
+  name: string | undefined;
+  modified: Array<unknown>;
+};
 
 const darkTheme = vscodeDarkInit({ settings: { fontSize: "11px" } });
 const lightTheme = vscodeLightInit({ settings: { fontSize: "11px" } });
@@ -71,7 +74,7 @@ function extractThemeStyleAttributes(themeStyle: TagStyle[]) {
 
     if (style.tag instanceof Array) {
       style.tag.forEach((tag) => {
-          const actualTag = tag as unknown as TagWithNameAndModified;
+        const actualTag = tag as unknown as TagWithNameAndModified;
 
         if (actualTag.name && (actualTag.modified.length === 0)) {
           styleAttributesByTagName.set(actualTag.name, attributes);
@@ -80,7 +83,7 @@ function extractThemeStyleAttributes(themeStyle: TagStyle[]) {
     } else {
       const actualTag = style.tag as unknown as TagWithNameAndModified;
 
-        if (actualTag.name && (actualTag.modified.length === 0)) {
+      if (actualTag.name && (actualTag.modified.length === 0)) {
         styleAttributesByTagName.set(actualTag.name, attributes);
       }
     }
@@ -132,7 +135,8 @@ function getStyledCode(
 
     let span;
     if (spanStyleAttributes) {
-      span = "<span style='" + spanStyleAttributes + "'>" + p.innerHTML.replaceAll(" ", "&nbsp;") +
+      span = "<span style='" + spanStyleAttributes + "'>" +
+        p.innerHTML.replaceAll(" ", "&nbsp;") +
         "</span>";
     } else {
       span = "<span>" + p.innerHTML.replaceAll(" ", "&nbsp;") + "</span>";
