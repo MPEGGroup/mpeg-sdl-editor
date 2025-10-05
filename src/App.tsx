@@ -14,7 +14,8 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { useMobileDetection } from "./hooks/useMobileDetection.ts";
 
 export function App() {
-  const initialCode = "// Start typing your SDL here...\n";
+  const initialCode =
+    "// Start typing your SDL here... <Ctrl+Space> for suggestions\n";
 
   const [code, setCode] = useState<string>(initialCode);
   const [toastState, showToast] = useToast();
