@@ -98,6 +98,10 @@ const switchScopeCompletionStrings: string[] = [
   "default",
 ];
 
+function isCommentCompletion(lastNode: SyntaxNode): boolean {
+  return lastNode.type.name === "Comment";
+}
+
 function isGlobalScopeCompletion(lastNode: SyntaxNode): boolean {
   // see if the last node is a specification
   if (lastNode.type.name === "Specification") {
@@ -229,6 +233,8 @@ function getContextualCompletionOptions(
       if (thirdLastNode.type.name !== "Whitespace") {
         return contextualCompletionStringsMap[thirdLastNode.type.name];
       }
+    } else {
+      return contextualCompletionStringsMap[secondLastNode.type.name];
     }
   }
 
@@ -251,6 +257,11 @@ function sdlComplete(context: CompletionContext): CompletionResult | null {
   const lastNode = tree.resolveInner(context.pos, -1);
   const lastText = context.state.sliceDoc(lastNode.from, context.pos);
   const lastTag = /^\w*$/.exec(lastText);
+
+  // Don't provide within a comment
+  if (isCommentCompletion(lastNode)) {
+    return null;
+  }
 
   if (isGlobalScopeCompletion(lastNode)) {
     // only provide completions at the global scope if completion was explicitly requested
