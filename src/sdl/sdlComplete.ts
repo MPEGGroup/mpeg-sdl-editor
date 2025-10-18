@@ -5,6 +5,7 @@ import {
 import type { SyntaxNode, Tree } from "@lezer/common";
 import { syntaxTree } from "@codemirror/language";
 
+// TODO: import type IDs
 const contextualCompletionStringsMap: Record<string, string[]> = {
   unsigned: ["int"],
   reserved: [
