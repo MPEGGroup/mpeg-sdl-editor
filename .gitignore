@@ -181,3 +181,4 @@ functional_tests/features/steps/helper/__pycache__
 html/bundle.js
 html/*.wasm
 .claude
+.vscode
