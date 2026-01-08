@@ -10,6 +10,7 @@ import { useToast } from "./hooks/useToast.ts";
 import { useFileOperations } from "./hooks/useFileOperations.ts";
 import { useTheme } from "./hooks/useTheme.ts";
 import { usePrettier } from "./hooks/usePrettier.ts";
+import { useRulerWidth } from "./hooks/useRulerWidth.ts";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useMobileDetection } from "./hooks/useMobileDetection.ts";
 
@@ -22,6 +23,7 @@ export function App() {
   const { theme, toggleTheme } = useTheme();
   const isMobile = useMobileDetection();
   const [isInfoShown, setInfoShown] = useState(false);
+  const { rulerWidth, setRulerWidth } = useRulerWidth();
   const [cursorPosition, setCursorPosition] = useState<
     { line: number; col: number }
   >({ line: 1, col: 1 });
@@ -69,6 +71,7 @@ export function App() {
     setCode,
     showToast,
     syntacticErrorCount,
+    rulerWidth,
   });
 
   const toggleInfo = useCallback(() => {
@@ -94,9 +97,8 @@ export function App() {
         onCopy={handleCopy}
         onSave={handleSave}
         onLoad={handleLoad}
-        onToggleTheme={toggleTheme}
-        _onToggleInfo={toggleInfo}
-        _isInfoShown={isInfoShown}
+        onToggleInfo={toggleInfo}
+        isInfoShown={isInfoShown}
       />
       <div className="flex-grow overflow-hidden" data-testid="main-content">
         <ResizableLayout
@@ -120,6 +122,7 @@ export function App() {
                 onCursorChange={onCursorChange}
                 onParseErrorChange={onParseErrorChange}
                 theme={theme}
+                rulerWidth={rulerWidth}
               />
             </div>
             <StatusBar
@@ -131,7 +134,7 @@ export function App() {
           </div>
 
           <div className="h-full md:p-2 md:pl-0">
-            <InfoArea />
+            <InfoArea theme={theme} onToggleTheme={toggleTheme} rulerWidth={rulerWidth} onRulerWidthChange={setRulerWidth} />
           </div>
         </ResizableLayout>
       </div>

@@ -57,11 +57,11 @@ export function ResizableLayout({
         : (
           <DesktopPanels
             leftChild={children[0]}
-            _rightChild={children[1]}
+            rightChild={children[1]}
             splitPercentage={splitPercentage}
             isInfoShown={isInfoShown}
-            _isDragging={isDragging}
-            _onMouseDown={handleMouseDown}
+            isDragging={isDragging}
+            onMouseDown={handleMouseDown}
           />
         )}
     </div>

@@ -8,22 +8,19 @@ interface UsePrettierProps {
   setCode: (code: string) => void;
   showToast: ShowToastFunction;
   syntacticErrorCount: number;
+  rulerWidth: number;
 }
 
 export function usePrettier(
-  { code, setCode, showToast, syntacticErrorCount }: UsePrettierProps,
+  { code, setCode, showToast, syntacticErrorCount, rulerWidth }: UsePrettierProps,
 ) {
   const prettifyInProgressRef = useRef(false);
 
   const handlePrettify = useCallback(async () => {
-    if (syntacticErrorCount > 0) {
-      showToast("Cannot prettify if parse errors exist", "warning");
-      return;
-    }
-
     const options: prettier.Options = {
       parser: "sdl",
       plugins: [prettierPluginSdl],
+      printWidth: rulerWidth,
     };
     try {
       prettifyInProgressRef.current = true;
@@ -32,14 +29,13 @@ export function usePrettier(
 
       setCode(formattedCode);
 
-      showToast("Code prettified!", "success", 2000);
       prettifyInProgressRef.current = false;
     } catch (error) {
       prettifyInProgressRef.current = false;
       console.error("Error prettifying code:", error);
       showToast("Error prettifying SDL. See console.", "error");
     }
-  }, [code, setCode, showToast, syntacticErrorCount]);
+  }, [code, setCode, showToast, syntacticErrorCount, rulerWidth]);
 
   return { handlePrettify };
 }
