@@ -2,20 +2,20 @@ import React from "react";
 
 interface DesktopPanelsProps {
   leftChild: React.ReactNode;
-  _rightChild: React.ReactNode;
+  rightChild: React.ReactNode;
   splitPercentage: number;
   isInfoShown: boolean;
-  _isDragging: boolean;
-  _onMouseDown: (e: React.MouseEvent) => void;
+  isDragging: boolean;
+  onMouseDown: (e: React.MouseEvent) => void;
 }
 
 export function DesktopPanels({
   leftChild,
-  _rightChild,
+  rightChild,
   splitPercentage,
   isInfoShown,
-  _isDragging,
-  _onMouseDown,
+  isDragging,
+  onMouseDown,
 }: DesktopPanelsProps) {
   return (
     <>
@@ -28,8 +28,7 @@ export function DesktopPanels({
       </div>
 
       {/* Divider - only show when panel is not collapsed */}
-      {
-        /* TODO: enable when info panel is implemented
+
       {isInfoShown && (
         <div
           className={`w-1 bg-base-300 hover:bg-primary/50 cursor-col-resize transition-all duration-150 ${
@@ -49,12 +48,10 @@ export function DesktopPanels({
             </div>
           </div>
         </div>
-      )} */
-      }
+      )}
 
       {/* Right panel - only show when not collapsed */}
-      {
-        /* TODO: enable when info panel is implemented
+
       {isInfoShown && (
         <div
           className="flex flex-col"
@@ -62,8 +59,7 @@ export function DesktopPanels({
         >
           {rightChild}
         </div>
-      )} */
-      }
+      )}
     </>
   );
 }

@@ -19,5 +19,12 @@ def step_impl(context, page):
 def step_impl(context, element_id):
     log.debug('waiting for element "{}"'.format(element_id))
 
-    WebDriverWait(context.browser, 3).until(presence_of_element_located((By.CSS_SELECTOR, '[data-testid="{}"]'.format(element_id))))
+    try:
+        log.debug('waiting for element "{}"'.format(element_id))
+        WebDriverWait(context.browser, 3).until(presence_of_element_located((By.CSS_SELECTOR, '[data-testid="{}"]'.format(element_id))))
+    except Exception as e:
+        log.error('Element not found: {}'.format(e))
+        log.debug('Page source: {}'.format(context.browser.page_source))
+        log.debug('Current URL: {}'.format(context.browser.current_url))
+        raise
 

@@ -29,7 +29,6 @@ export function useFileOperations(
         const writableStream = await fileHandle.createWritable();
         await writableStream.write(code);
         await writableStream.close();
-        showToast("File saved successfully!");
       } else {
         const blob = new Blob([code], { type: "text/plain" });
         const url = URL.createObjectURL(blob);
@@ -40,12 +39,9 @@ export function useFileOperations(
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        showToast("File downloaded successfully!");
       }
     } catch (err) {
-      if (err instanceof DOMException && err.name === "AbortError") {
-        showToast("File save cancelled.");
-      } else {
+      if (!(err instanceof DOMException && err.name === "AbortError")) {
         console.error("Error saving file:", err);
         showToast("Error saving file. See console.", "error");
       }
@@ -61,11 +57,10 @@ export function useFileOperations(
           const text = e.target?.result;
           if (typeof text === "string") {
             setCode(text);
-            showToast("File loaded successfully!");
           }
         };
         reader.onerror = () => {
-          showToast("Error loading file.");
+          showToast("Error loading file.", "error");
         };
         reader.readAsText(file);
       }
@@ -90,7 +85,6 @@ export function useFileOperations(
       const clipboardItem = new ClipboardItem(clipboardItems);
 
       await navigator.clipboard.write([clipboardItem]);
-      showToast("Content copied to clipboard!");
     } catch (err) {
       console.error("Failed to copy content: ", err);
       showToast("Failed to copy content. See console.", "error");

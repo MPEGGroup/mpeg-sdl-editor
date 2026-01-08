@@ -44,6 +44,7 @@ interface EditorProps {
   onCursorChange: (position: { line: number; col: number }) => void;
   onParseErrorChange: (syntacticParseErrors: SyntacticParseError[]) => void;
   theme: "light" | "dark";
+  rulerWidth: number;
 }
 
 export interface EditorRef {
@@ -160,7 +161,7 @@ function getStyledCode(
 }
 
 export const Editor = forwardRef<EditorRef, EditorProps>(
-  ({ code, onCodeChange, onCursorChange, onParseErrorChange, theme }, ref) => {
+  ({ code, onCodeChange, onCursorChange, onParseErrorChange, theme, rulerWidth }, ref) => {
     const lastCursorPosition = useRef({ line: 1, col: 1 });
     const editorViewRef = useRef<EditorView | null>(null);
 
@@ -171,8 +172,9 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
       codeFolding(),
       foldGutter(),
       lintGutter(),
-      ruler(80),
     ], []);
+
+    const rulerExtension = useMemo(() => ruler(rulerWidth), [rulerWidth]);
 
     // Memoize dynamic extensions that depend on props
     const dynamicExtensions = useMemo(() => [
@@ -181,9 +183,10 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
 
     const extensions = useMemo(() => [
       ...staticExtensions,
+      rulerExtension,
       sdlLanguageSupport,
       ...dynamicExtensions,
-    ], [staticExtensions, sdlLanguageSupport, dynamicExtensions]);
+    ], [staticExtensions, rulerExtension, sdlLanguageSupport, dynamicExtensions]);
 
     // Memoize imperative methods
     const expandAll = useCallback(() => {
