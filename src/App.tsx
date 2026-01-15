@@ -116,7 +116,6 @@ export function App() {
     code,
     setCode,
     showToast,
-    syntacticErrorCount,
     rulerWidth,
   });
 
@@ -147,7 +146,7 @@ export function App() {
         onToggleSettings={toggleSettings}
         isSettingsShown={isSettingsShown}
       />
-      <div className="flex-grow overflow-hidden" data-testid="main-content">
+      <div className="grow overflow-hidden" data-testid="main-content">
         <ResizableLayout
           theme={theme}
           isSettingsShown={isSettingsShown}
@@ -161,7 +160,7 @@ export function App() {
               onExpandAll={handleExpandAll}
               onCollapseAll={handleCollapseAll}
             />
-            <div className="flex-grow overflow-auto">
+            <div className="grow overflow-auto">
               <Editor
                 ref={editorRef}
                 code={code}

@@ -133,16 +133,18 @@ export function Navbar({
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 xmlns="http://www.w3.org/2000/svg"
                 className="w-6 h-6"
               >
-                <path
-                  d="M18 8C19.6569 8 21 6.65685 21 5C21 3.34315 19.6569 2 18 2C16.3431 2 15 3.34315 15 5C15 5.12548 15.0077 5.24917 15.0227 5.37061L8.08261 9.19071C7.54305 8.46589 6.6747 8 5.7 8C4.20883 8 3 9.20883 3 10.7C3 12.1912 4.20883 13.4 5.7 13.4C6.6747 13.4 7.54305 12.9341 8.08261 12.2093L15.0227 16.0294C15.0077 16.1508 15 16.2745 15 16.4C15 18.0569 16.3431 19.4 18 19.4C19.6569 19.4 21 18.0569 21 16.4C21 14.7431 19.6569 13.4 18 13.4C17.0253 13.4 16.157 13.8659 15.6174 14.5907L8.67728 10.7706C8.69231 10.6492 8.7 10.5255 8.7 10.4C8.7 10.2745 8.69231 10.1508 8.67728 10.0294L15.6174 6.20929C16.157 6.93411 17.0253 7.4 18 7.4"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
+                <path d="M9 12C9 13.3807 7.88071 14.5 6.5 14.5C5.11929 14.5 4 13.3807 4 12C4 10.6193 5.11929 9.5 6.5 9.5C7.88071 9.5 9 10.6193 9 12Z" />
+                <path d="M14 6.5L9 10" />
+                <path d="M14 17.5L9 14" />
+                <path d="M19 18.5C19 19.8807 17.8807 21 16.5 21C15.1193 21 14 19.8807 14 18.5C14 17.1193 15.1193 16 16.5 16C17.8807 16 19 17.1193 19 18.5Z" />
+                <path d="M19 5.5C19 6.88071 17.8807 8 16.5 8C15.1193 8 14 6.88071 14 5.5C14 4.11929 15.1193 3 16.5 3C17.8807 3 19 4.11929 19 5.5Z" />
               </svg>
             </button>
           </li>
@@ -159,7 +161,7 @@ export function Navbar({
                     <svg
                       fill="none"
                       stroke="currentColor"
-                      strokeWidth="1.5"
+                      strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       viewBox="0 0 24 24"
@@ -179,7 +181,7 @@ export function Navbar({
                   : (
                     <svg
                       fill="none"
-                      strokeWidth="1.5"
+                      strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       stroke="currentColor"

@@ -60,7 +60,7 @@ export function Settings(
           </button>
         </div>
         <span className="text-sm text-right whitespace-nowrap">
-          Ruler Width
+          Prettier Text Width
         </span>
         <div>
           <select

@@ -7,13 +7,11 @@ interface UsePrettierProps {
   code: string;
   setCode: (code: string) => void;
   showToast: ShowToastFunction;
-  syntacticErrorCount: number;
   rulerWidth: number;
 }
 
 export function usePrettier(
-  { code, setCode, showToast, syntacticErrorCount, rulerWidth }:
-    UsePrettierProps,
+  { code, setCode, showToast, rulerWidth }: UsePrettierProps,
 ) {
   const prettifyInProgressRef = useRef(false);
 
