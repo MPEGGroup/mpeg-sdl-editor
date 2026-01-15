@@ -1,16 +1,34 @@
 import type { Theme } from "../hooks/useTheme.ts";
 import { RULER_WIDTH_OPTIONS } from "../hooks/useRulerWidth.ts";
 
-interface InfoAreaProps {
+interface SettingsProps {
   theme: Theme;
   onToggleTheme: () => void;
   rulerWidth: number;
   onRulerWidthChange: (width: number) => void;
+  autoDisplayCompletions: boolean;
+  onAutoDisplayCompletionsChange: (value: boolean) => void;
+  enableLinting: boolean;
+  onEnableLintingChange: (value: boolean) => void;
 }
 
-export function InfoArea({ theme, onToggleTheme, rulerWidth, onRulerWidthChange }: InfoAreaProps) {
+export function Settings(
+  {
+    theme,
+    onToggleTheme,
+    rulerWidth,
+    onRulerWidthChange,
+    autoDisplayCompletions,
+    onAutoDisplayCompletionsChange,
+    enableLinting,
+    onEnableLintingChange,
+  }: SettingsProps,
+) {
   return (
     <div className="h-full bg-base-100 md:p-4 overflow-auto">
+      <h2 className="font-bold pb-4">
+        Settings
+      </h2>
       <div className="grid grid-cols-[auto_auto] gap-x-3 gap-y-3 items-center justify-start">
         <span className="text-sm text-right whitespace-nowrap">Theme</span>
         <div>
@@ -41,7 +59,9 @@ export function InfoArea({ theme, onToggleTheme, rulerWidth, onRulerWidthChange 
               )}
           </button>
         </div>
-        <span className="text-sm text-right whitespace-nowrap">Ruler Width</span>
+        <span className="text-sm text-right whitespace-nowrap">
+          Ruler Width
+        </span>
         <div>
           <select
             className="select select-sm border border-base-content/30 rounded-lg bg-transparent w-auto"
@@ -54,6 +74,28 @@ export function InfoArea({ theme, onToggleTheme, rulerWidth, onRulerWidthChange 
               </option>
             ))}
           </select>
+        </div>
+        <span className="text-sm text-right whitespace-nowrap">
+          Auto-Display Completions
+        </span>
+        <div>
+          <input
+            type="checkbox"
+            className="checkbox checkbox-sm border-base-content/30"
+            checked={autoDisplayCompletions}
+            onChange={(e) => onAutoDisplayCompletionsChange(e.target.checked)}
+          />
+        </div>
+        <span className="text-sm text-right whitespace-nowrap">
+          Enable Linting
+        </span>
+        <div>
+          <input
+            type="checkbox"
+            className="checkbox checkbox-sm border-base-content/30"
+            checked={enableLinting}
+            onChange={(e) => onEnableLintingChange(e.target.checked)}
+          />
         </div>
       </div>
     </div>

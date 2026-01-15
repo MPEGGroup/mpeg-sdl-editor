@@ -3,34 +3,34 @@ import type { Theme } from "../hooks/useTheme.ts";
 
 interface MobileDrawerProps {
   theme: Theme;
-  isInfoShown: boolean;
-  onToggleInfo: () => void;
+  isSettingsShown: boolean;
+  onToggleSettings: () => void;
   children: React.ReactNode;
 }
 
 export function MobileDrawer(
-  { theme, isInfoShown, onToggleInfo, children }: MobileDrawerProps,
+  { theme, isSettingsShown, onToggleSettings, children }: MobileDrawerProps,
 ) {
   return (
     <>
-      {isInfoShown && (
+      {isSettingsShown && (
         <div
           className="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300"
-          onClick={onToggleInfo}
+          onClick={onToggleSettings}
         />
       )}
       <div
         className={`fixed top-0 right-0 h-full w-80 bg-base-100 shadow-xl z-40 transform transition-transform duration-300 ease-in-out ${
-          isInfoShown ? "translate-x-0" : "translate-x-full"
+          isSettingsShown ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <button
           type="button"
-          onClick={onToggleInfo}
+          onClick={onToggleSettings}
           className={`absolute top-2 right-2 btn btn-ghost px-2 py-2 z-10 ${
             theme === "dark" ? "hover:bg-gray-500 hover:bg-opacity-20" : ""
           }`}
-          title="Close info panel"
+          title="Close settings"
         >
           <svg
             className="w-6 h-6"
@@ -46,7 +46,7 @@ export function MobileDrawer(
             />
           </svg>
         </button>
-        <div className="h-full p-4 pt-8 overflow-hidden">
+        <div className="h-full p-4 pt-4 overflow-hidden">
           <div className="overflow-y-auto h-full">
             {children}
           </div>

@@ -7,17 +7,17 @@ import type { Theme } from "../hooks/useTheme.ts";
 interface ResizableLayoutProps {
   children: [React.ReactNode, React.ReactNode];
   theme: Theme;
-  isInfoShown: boolean;
+  isSettingsShown: boolean;
   isMobile: boolean;
-  onToggleInfo: () => void;
+  onToggleSettings: () => void;
 }
 
 export function ResizableLayout({
   children,
   theme,
-  isInfoShown,
+  isSettingsShown,
   isMobile,
-  onToggleInfo,
+  onToggleSettings,
 }: ResizableLayoutProps) {
   const minLeftWidth = 400;
   const minRightWidth = 300;
@@ -32,7 +32,7 @@ export function ResizableLayout({
     containerRef,
     minLeftWidth,
     minRightWidth,
-    isInfoShown,
+    isSettingsShown,
     onSplitPercentageChange,
   });
 
@@ -47,8 +47,8 @@ export function ResizableLayout({
 
             <MobileDrawer
               theme={theme}
-              isInfoShown={isInfoShown}
-              onToggleInfo={onToggleInfo}
+              isSettingsShown={isSettingsShown}
+              onToggleSettings={onToggleSettings}
             >
               {children[1]}
             </MobileDrawer>
@@ -59,7 +59,7 @@ export function ResizableLayout({
             leftChild={children[0]}
             rightChild={children[1]}
             splitPercentage={splitPercentage}
-            isInfoShown={isInfoShown}
+            isSettingsShown={isSettingsShown}
             isDragging={isDragging}
             onMouseDown={handleMouseDown}
           />
