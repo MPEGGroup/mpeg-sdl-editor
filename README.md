@@ -10,6 +10,10 @@
 
 Go to: https://mpeggroup.github.io/mpeg-sdl-editor/
 
+## Parser Library
+
+This editor makes use of: https://github.com/MPEGGroup/mpeg-sdl-parser
+
 ## Development
 
 `@mpeggroup/mpeg-sdl-parser` is hosted on GitHub packages, so before installing
