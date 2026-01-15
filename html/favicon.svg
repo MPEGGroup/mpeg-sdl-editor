@@ -4,7 +4,8 @@
   xmlns="http://www.w3.org/2000/svg"
   version="1.1"
   viewBox="220 10 450 450"
-> <defs>
+>
+  <defs>
     <style>
     .st0 {
       fill: #08a6e0;
