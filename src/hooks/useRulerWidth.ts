@@ -1,6 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
 
-export const RULER_WIDTH_OPTIONS = [60, 80, 100, 120, 140, 160, 180, 200] as const;
+export const RULER_WIDTH_OPTIONS = [
+  60,
+  80,
+  100,
+  120,
+  140,
+  160,
+  180,
+  200,
+] as const;
 export type RulerWidth = (typeof RULER_WIDTH_OPTIONS)[number];
 
 function isValidRulerWidth(value: number): value is RulerWidth {
