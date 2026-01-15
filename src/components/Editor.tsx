@@ -312,6 +312,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
           basicSetup={{
             lineNumbers: true,
             syntaxHighlighting: true,
+            history: true,
             bracketMatching: true,
             closeBrackets: true,
             highlightActiveLineGutter: true,
@@ -320,7 +321,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
             autocompletion: false,
             defaultKeymap: true,
             searchKeymap: false,
-            historyKeymap: false,
+            historyKeymap: true,
             foldGutter: false,
             closeBracketsKeymap: false,
             foldKeymap: false,
