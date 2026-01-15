@@ -85,9 +85,7 @@ export function useFileOperations(
       const clipboardItem = new ClipboardItem(clipboardItems);
 
       await navigator.clipboard.write([clipboardItem]);
-
       showToast("Copied!");
-
     } catch (err) {
       console.error("Failed to copy content: ", err);
       showToast("Failed to copy content. See console.", "error");
