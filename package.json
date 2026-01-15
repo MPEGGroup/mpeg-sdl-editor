@@ -38,7 +38,7 @@
     "@codemirror/lint": "6.9.2",
     "@lezer/common": "1.5.0",
     "@lezer/highlight": "1.2.3",
-    "@mpeggroup/mpeg-sdl-parser": "3.0.1",
+    "@mpeggroup/mpeg-sdl-parser": "3.0.2",
     "@types/wicg-file-system-access": "2023.10.7",
     "@uiw/codemirror-theme-vscode": "4.25.4",
     "@uiw/react-codemirror": "4.25.4",
@@ -48,9 +48,12 @@
     "tailwindcss": "4.1.18"
   },
   "overrides": {
+    "@codemirror/language": "6.12.1",
+    "@codemirror/lint": "6.9.2",
+    "@codemirror/state": "6.5.4",
+    "@codemirror/view": "6.39.9",
     "@lezer/common": "1.5.0",
-    "@lezer/lr": "1.4.7",
-    "@codemirror/state": "6.5.3",
-    "@lezer/highlight": "1.2.3"
+    "@lezer/highlight": "1.2.3",
+    "@lezer/lr": "1.4.7"
   }
 }
