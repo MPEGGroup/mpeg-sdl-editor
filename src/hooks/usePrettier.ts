@@ -12,7 +12,8 @@ interface UsePrettierProps {
 }
 
 export function usePrettier(
-  { code, setCode, showToast, syntacticErrorCount, rulerWidth }: UsePrettierProps,
+  { code, setCode, showToast, syntacticErrorCount, rulerWidth }:
+    UsePrettierProps,
 ) {
   const prettifyInProgressRef = useRef(false);
 
@@ -35,7 +36,7 @@ export function usePrettier(
       console.error("Error prettifying code:", error);
       showToast("Error prettifying SDL. See console.", "error");
     }
-  }, [code, setCode, showToast, syntacticErrorCount, rulerWidth]);
+  }, [code, setCode, showToast, rulerWidth]);
 
   return { handlePrettify };
 }

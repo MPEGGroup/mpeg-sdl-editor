@@ -26,6 +26,7 @@ import { EditorView } from "@codemirror/view";
 import { SyntacticParseError } from "@mpeggroup/mpeg-sdl-parser";
 export { ViewUpdate } from "@codemirror/view";
 import { lintGutter } from "@codemirror/lint";
+import { autocompletion } from "@codemirror/autocomplete";
 import { sdl } from "../sdl/sdlLanguage.ts";
 import { sdlLinter } from "../sdl/sdlLinter.ts";
 import { ruler } from "../codemirror/ruler.ts";
@@ -45,6 +46,8 @@ interface EditorProps {
   onParseErrorChange: (syntacticParseErrors: SyntacticParseError[]) => void;
   theme: "light" | "dark";
   rulerWidth: number;
+  autoDisplayCompletions: boolean;
+  enableLinting: boolean;
 }
 
 export interface EditorRef {
@@ -161,9 +164,23 @@ function getStyledCode(
 }
 
 export const Editor = forwardRef<EditorRef, EditorProps>(
-  ({ code, onCodeChange, onCursorChange, onParseErrorChange, theme, rulerWidth }, ref) => {
+  (
+    {
+      code,
+      onCodeChange,
+      onCursorChange,
+      onParseErrorChange,
+      theme,
+      rulerWidth,
+      autoDisplayCompletions,
+      enableLinting,
+    },
+    ref,
+  ) => {
     const lastCursorPosition = useRef({ line: 1, col: 1 });
     const editorViewRef = useRef<EditorView | null>(null);
+    const onParseErrorChangeRef = useRef(onParseErrorChange);
+    onParseErrorChangeRef.current = onParseErrorChange;
 
     const sdlLanguageSupport = useMemo(() => sdl(), []);
 
@@ -171,22 +188,47 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
     const staticExtensions = useMemo(() => [
       codeFolding(),
       foldGutter(),
-      lintGutter(),
     ], []);
 
     const rulerExtension = useMemo(() => ruler(rulerWidth), [rulerWidth]);
 
+    const autocompletionExtension = useMemo(
+      () => autocompletion({ activateOnTyping: autoDisplayCompletions }),
+      [autoDisplayCompletions],
+    );
+
+    const stableOnParseErrorChange = useCallback(
+      (errors: SyntacticParseError[]) => {
+        onParseErrorChangeRef.current(errors);
+      },
+      [],
+    );
+
     // Memoize dynamic extensions that depend on props
-    const dynamicExtensions = useMemo(() => [
-      sdlLinter({ onParseErrorChange }),
-    ], [onParseErrorChange]);
+    const dynamicExtensions = useMemo(
+      () =>
+        enableLinting
+          ? [
+            lintGutter(),
+            sdlLinter({ onParseErrorChange: stableOnParseErrorChange }),
+          ]
+          : [],
+      [enableLinting, stableOnParseErrorChange],
+    );
 
     const extensions = useMemo(() => [
       ...staticExtensions,
       rulerExtension,
+      autocompletionExtension,
       sdlLanguageSupport,
       ...dynamicExtensions,
-    ], [staticExtensions, rulerExtension, sdlLanguageSupport, dynamicExtensions]);
+    ], [
+      staticExtensions,
+      rulerExtension,
+      autocompletionExtension,
+      sdlLanguageSupport,
+      dynamicExtensions,
+    ]);
 
     // Memoize imperative methods
     const expandAll = useCallback(() => {
@@ -224,8 +266,8 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
       },
     }), [expandAll, collapseAll, sdlLanguageSupport, code, theme]);
 
-    const onInternalCodeChange = useCallback((code: string) => {
-      onCodeChange(code);
+    const onInternalCodeChange = useCallback((newCode: string) => {
+      onCodeChange(newCode);
     }, [onCodeChange]);
 
     const onViewUpdate = useCallback((viewUpdate: ViewUpdate) => {
@@ -265,6 +307,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
           onCreateEditor={(view) => {
             editorViewRef.current = view;
           }}
+          indentWithTab
           extensions={extensions}
           basicSetup={{
             lineNumbers: true,
@@ -274,14 +317,14 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
             highlightActiveLineGutter: true,
             highlightActiveLine: true,
             highlightSelectionMatches: true,
-            autocompletion: true,
-            defaultKeymap: false,
+            autocompletion: false,
+            defaultKeymap: true,
             searchKeymap: false,
             historyKeymap: false,
             foldGutter: false,
             closeBracketsKeymap: false,
             foldKeymap: false,
-            completionKeymap: false,
+            completionKeymap: true,
           }}
         />
       </div>

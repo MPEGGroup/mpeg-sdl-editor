@@ -24,11 +24,9 @@ export function sdlLinter(options: SdlLinterOptions): Extension {
         const node: SyntaxNodeRef = cursor.node;
         const error = createParseErrorFromTextAndCursor(text, cursor);
 
-        // only keep one error per line
         if (!errorRows.has(error.location!.row)) {
           errorRows.add(error.location!.row);
 
-          // Store the error for external use
           errors.push(error);
 
           diagnostics.push({
@@ -41,7 +39,6 @@ export function sdlLinter(options: SdlLinterOptions): Extension {
       }
     } while (cursor.next());
 
-    // Call the callback
     if (options.onParseErrorChange) {
       options.onParseErrorChange(errors);
     }
