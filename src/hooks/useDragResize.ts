@@ -4,7 +4,7 @@ interface UseDragResizeProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
   minLeftWidth: number;
   minRightWidth: number;
-  isInfoShown: boolean;
+  isSettingsShown: boolean;
   onSplitPercentageChange: (percentage: number) => void;
 }
 
@@ -12,7 +12,7 @@ export function useDragResize({
   containerRef,
   minLeftWidth,
   minRightWidth,
-  isInfoShown,
+  isSettingsShown,
   onSplitPercentageChange,
 }: UseDragResizeProps) {
   const [isDragging, setIsDragging] = useState(false);
@@ -20,7 +20,7 @@ export function useDragResize({
   const [dragStartPercentage, setDragStartPercentage] = useState(0);
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    if (!isInfoShown) {
+    if (!isSettingsShown) {
       return;
     }
 
@@ -39,10 +39,10 @@ export function useDragResize({
     setDragStartX(e.clientX);
     setDragStartPercentage(currentPercentage);
     setIsDragging(true);
-  }, [isInfoShown, containerRef]);
+  }, [isSettingsShown, containerRef]);
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!isDragging || !containerRef.current || !isInfoShown) {
+    if (!isDragging || !containerRef.current || !isSettingsShown) {
       return;
     }
 
@@ -72,7 +72,7 @@ export function useDragResize({
     dragStartPercentage,
     minLeftWidth,
     minRightWidth,
-    isInfoShown,
+    isSettingsShown,
     onSplitPercentageChange,
     containerRef,
   ]);
@@ -82,7 +82,7 @@ export function useDragResize({
   }, []);
 
   useEffect(() => {
-    if (isDragging && isInfoShown) {
+    if (isDragging && isSettingsShown) {
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
       document.body.style.cursor = "col-resize";
@@ -95,7 +95,7 @@ export function useDragResize({
         document.body.style.userSelect = "";
       };
     }
-  }, [isDragging, handleMouseMove, handleMouseUp, isInfoShown]);
+  }, [isDragging, handleMouseMove, handleMouseUp, isSettingsShown]);
 
   return {
     isDragging,

@@ -13,22 +13,24 @@ const rulerWidth = Facet.define<number, number>({
 const showRuler = ViewPlugin.fromClass(
   class {
     rulerDiv: HTMLDivElement;
+    currentColumn: number;
 
     constructor(view: EditorView) {
-      const column = view.state.facet(rulerWidth);
+      this.currentColumn = view.state.facet(rulerWidth);
 
       this.rulerDiv = view.dom.appendChild(document.createElement("div"));
       this.rulerDiv.classList.add("cm-ruler");
       this.rulerDiv.style.cssText =
         "position: absolute; top: 0; height: 100%; width: 1px; pointer-events: none; overflow: hidden;";
 
-      this.updateRulePosition(view, column);
+      this.updateRulePosition(view, this.currentColumn);
     }
 
     update(update: ViewUpdate) {
-      if (update.geometryChanged && !update.docChanged) {
-        const column = update.state.facet(rulerWidth);
-        this.updateRulePosition(update.view, column);
+      const newColumn = update.state.facet(rulerWidth);
+      if (update.geometryChanged || newColumn !== this.currentColumn) {
+        this.currentColumn = newColumn;
+        this.updateRulePosition(update.view, newColumn);
       }
     }
 

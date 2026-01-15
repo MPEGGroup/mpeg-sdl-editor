@@ -3,25 +3,61 @@ import { Editor } from "./components/Editor.tsx";
 import type { EditorRef } from "./components/Editor.tsx";
 import { Navbar } from "./components/Navbar.tsx";
 import { SubNav } from "./components/SubNav.tsx";
-import { InfoArea } from "./components/InfoArea.tsx";
+import { Settings } from "./components/Settings.tsx";
 import { StatusBar } from "./components/StatusBar.tsx";
 import { ResizableLayout } from "./components/ResizableLayout.tsx";
 import { useToast } from "./hooks/useToast.ts";
 import { useFileOperations } from "./hooks/useFileOperations.ts";
 import { useTheme } from "./hooks/useTheme.ts";
 import { usePrettier } from "./hooks/usePrettier.ts";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useRulerWidth } from "./hooks/useRulerWidth.ts";
+import { useAutoDisplayCompletions } from "./hooks/useAutoDisplayCompletions.ts";
+import { useEnableLinting } from "./hooks/useEnableLinting.ts";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMobileDetection } from "./hooks/useMobileDetection.ts";
 
-export function App() {
-  const initialCode =
-    "// Start typing your SDL here... <Ctrl+Space> for suggestions\n";
+function getInitialCodeFromHash(): string | null {
+  const hash = globalThis.location.hash;
+  if (hash.startsWith("#c=")) {
+    try {
+      return atob(hash.slice(3));
+    } catch {
+      return null;
+    }
+  }
+  return null;
+}
 
-  const [code, setCode] = useState<string>(initialCode);
+export function App() {
+  const defaultCode =
+    "// Start typing your SDL here... <Ctrl+Space> for completions\n";
+
+  const [code, setCodeInternal] = useState<string>(
+    () => getInitialCodeFromHash() ?? defaultCode,
+  );
+
+  const setCode = useCallback((newCode: string) => {
+    setCodeInternal(newCode);
+  }, []);
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hashCode = getInitialCodeFromHash();
+      if (hashCode !== null) {
+        setCode(hashCode);
+      }
+    };
+    globalThis.addEventListener("hashchange", handleHashChange);
+    return () => globalThis.removeEventListener("hashchange", handleHashChange);
+  }, []);
   const [toastState, showToast] = useToast();
   const { theme, toggleTheme } = useTheme();
   const isMobile = useMobileDetection();
-  const [isInfoShown, setInfoShown] = useState(false);
+  const [isSettingsShown, setSettingsShown] = useState(false);
+  const { rulerWidth, setRulerWidth } = useRulerWidth();
+  const { autoDisplayCompletions, setAutoDisplayCompletions } =
+    useAutoDisplayCompletions();
+  const { enableLinting, setEnableLinting } = useEnableLinting();
   const [cursorPosition, setCursorPosition] = useState<
     { line: number; col: number }
   >({ line: 1, col: 1 });
@@ -39,6 +75,18 @@ export function App() {
     },
     [],
   );
+  const handleShare = useCallback(async () => {
+    const encoded = btoa(code);
+    const url =
+      `${globalThis.location.origin}${globalThis.location.pathname}#c=${encoded}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      showToast("URL copied!");
+    } catch {
+      showToast("Failed to copy URL", "error");
+    }
+  }, [code, showToast]);
+
   const {
     handleSave,
     handleLoad,
@@ -68,11 +116,11 @@ export function App() {
     code,
     setCode,
     showToast,
-    syntacticErrorCount,
+    rulerWidth,
   });
 
-  const toggleInfo = useCallback(() => {
-    setInfoShown((prev) => !prev);
+  const toggleSettings = useCallback(() => {
+    setSettingsShown((prev) => !prev);
   }, []);
 
   const handleExpandAll = useCallback(() => {
@@ -94,16 +142,16 @@ export function App() {
         onCopy={handleCopy}
         onSave={handleSave}
         onLoad={handleLoad}
-        onToggleTheme={toggleTheme}
-        _onToggleInfo={toggleInfo}
-        _isInfoShown={isInfoShown}
+        onShare={handleShare}
+        onToggleSettings={toggleSettings}
+        isSettingsShown={isSettingsShown}
       />
-      <div className="flex-grow overflow-hidden" data-testid="main-content">
+      <div className="grow overflow-hidden" data-testid="main-content">
         <ResizableLayout
           theme={theme}
-          isInfoShown={isInfoShown}
+          isSettingsShown={isSettingsShown}
           isMobile={isMobile}
-          onToggleInfo={toggleInfo}
+          onToggleSettings={toggleSettings}
         >
           <div className="flex flex-col h-full">
             <SubNav
@@ -112,7 +160,7 @@ export function App() {
               onExpandAll={handleExpandAll}
               onCollapseAll={handleCollapseAll}
             />
-            <div className="flex-grow overflow-auto">
+            <div className="grow overflow-auto">
               <Editor
                 ref={editorRef}
                 code={code}
@@ -120,6 +168,9 @@ export function App() {
                 onCursorChange={onCursorChange}
                 onParseErrorChange={onParseErrorChange}
                 theme={theme}
+                rulerWidth={rulerWidth}
+                autoDisplayCompletions={autoDisplayCompletions}
+                enableLinting={enableLinting}
               />
             </div>
             <StatusBar
@@ -127,16 +178,26 @@ export function App() {
               characterCount={characterCount}
               syntacticErrorCount={syntacticErrorCount}
               cursorPosition={cursorPosition}
+              enableLinting={enableLinting}
             />
           </div>
 
           <div className="h-full md:p-2 md:pl-0">
-            <InfoArea />
+            <Settings
+              theme={theme}
+              onToggleTheme={toggleTheme}
+              rulerWidth={rulerWidth}
+              onRulerWidthChange={setRulerWidth}
+              autoDisplayCompletions={autoDisplayCompletions}
+              onAutoDisplayCompletionsChange={setAutoDisplayCompletions}
+              enableLinting={enableLinting}
+              onEnableLintingChange={setEnableLinting}
+            />
           </div>
         </ResizableLayout>
       </div>
       {toastState && (
-        <div className="toast toast-top toast-center sm:toast-end">
+        <div className="toast toast-top toast-end mt-14">
           <div
             className={`alert ${
               toastState.type === "success"

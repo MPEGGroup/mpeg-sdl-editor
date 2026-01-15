@@ -2,7 +2,10 @@ import { syntaxTree } from "@codemirror/language";
 import { type Diagnostic, linter } from "@codemirror/lint";
 import { type SyntaxNodeRef } from "@lezer/common";
 import { type Extension } from "@codemirror/state";
-import { SyntacticParseError } from "@mpeggroup/mpeg-sdl-parser";
+import {
+  createParseErrorFromTextAndCursor,
+  SyntacticParseError,
+} from "@mpeggroup/mpeg-sdl-parser";
 
 interface SdlLinterOptions {
   onParseErrorChange: (syntacticParseErrors: SyntacticParseError[]) => void;
@@ -19,28 +22,23 @@ export function sdlLinter(options: SdlLinterOptions): Extension {
     do {
       if (cursor.type.isError) {
         const node: SyntaxNodeRef = cursor.node;
-        const error = SyntacticParseError.fromTextAndCursor(text, cursor);
+        const error = createParseErrorFromTextAndCursor(text, cursor);
 
-        // only keep one error per line
         if (!errorRows.has(error.location!.row)) {
           errorRows.add(error.location!.row);
 
-          // Store the error for external use
           errors.push(error);
-
-          const cleanedMessage = error.errorMessage.split(" =>")[0];
 
           diagnostics.push({
             from: node.from,
             to: node.to,
             severity: "warning",
-            message: cleanedMessage,
+            message: error.errorMessage,
           });
         }
       }
     } while (cursor.next());
 
-    // Call the callback
     if (options.onParseErrorChange) {
       options.onParseErrorChange(errors);
     }

@@ -11,6 +11,9 @@ describe("Editor component", () => {
         onCursorChange={() => {}}
         onParseErrorChange={() => {}}
         theme="light"
+        rulerWidth={80}
+        autoDisplayCompletions
+        enableLinting
       />,
     );
     const textboxes = getAllByRole("textbox");

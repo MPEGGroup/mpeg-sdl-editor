@@ -1,9 +1,9 @@
 import { describe, expect, test } from "bun:test";
-import { createParser } from "../src/sdl/sdlLanguage.ts";
+import { sdlLanguage } from "../src/sdl/sdlLanguage.ts";
 
 describe("sdlLanguage", () => {
   test("parses valid SDL without error", () => {
-    const parser = createParser();
+    const parser = sdlLanguage.parser;
     const input = "computed const int a = 1;";
     const tree = parser.parse(input);
 
@@ -22,7 +22,7 @@ describe("sdlLanguage", () => {
   });
 
   test("parses invalid SDL with error node", () => {
-    const parser = createParser();
+    const parser = sdlLanguage.parser;
     const input = "invalid sdl $";
     const tree = parser.parse(input);
 
