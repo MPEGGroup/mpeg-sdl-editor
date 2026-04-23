@@ -1,4 +1,8 @@
-import { SyntacticParseError } from "@mpeggroup/mpeg-sdl-parser";
+import {
+  SemanticError,
+  SemanticWarning,
+  SyntaxError,
+} from "@mpeggroup/mpeg-sdl-parser";
 import { Editor } from "./components/Editor.tsx";
 import type { EditorRef } from "./components/Editor.tsx";
 import { Navbar } from "./components/Navbar.tsx";
@@ -15,6 +19,9 @@ import { useAutoDisplayCompletions } from "./hooks/useAutoDisplayCompletions.ts"
 import { useEnableLinting } from "./hooks/useEnableLinting.ts";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMobileDetection } from "./hooks/useMobileDetection.ts";
+import { useShowSyntaxErrors } from "./hooks/useShowSyntaxErrors.ts";
+import { useShowSemanticErrors } from "./hooks/useShowSymanticErrors.ts";
+import { useShowSemanticWarnings } from "./hooks/useShowSemanticWarnings.ts";
 
 function getInitialCodeFromHash(): string | null {
   const hash = globalThis.location.hash;
@@ -58,6 +65,10 @@ export function App() {
   const { autoDisplayCompletions, setAutoDisplayCompletions } =
     useAutoDisplayCompletions();
   const { enableLinting, setEnableLinting } = useEnableLinting();
+  const { showSyntaxErrors, setShowSyntaxErrors } = useShowSyntaxErrors();
+  const { showSemanticErrors, setShowSemanticErrors } = useShowSemanticErrors();
+  const { showSemanticWarnings, setShowSemanticWarnings } =
+    useShowSemanticWarnings();
   const [cursorPosition, setCursorPosition] = useState<
     { line: number; col: number }
   >({ line: 1, col: 1 });
@@ -100,16 +111,37 @@ export function App() {
 
   const lineCount = useMemo(() => code.split("\n").length, [code]);
   const characterCount = useMemo(() => code.length, [code]);
-  const [syntacticParseErrors, setSyntacticParseErrors] = useState<
-    SyntacticParseError[]
-  >([]);
+  const [syntaxErrors, setSyntaxErrors] = useState<SyntaxError[]>([]);
+  const [semanticErrors, setSemanticErrors] = useState<SemanticError[]>([]);
+  const [semanticWarnings, setSemanticWarnings] = useState<SemanticWarning[]>(
+    [],
+  );
 
-  const onParseErrorChange = useCallback((newErrors: SyntacticParseError[]) => {
-    setSyntacticParseErrors(newErrors);
+  const onSyntaxErrorChange = useCallback((newErrors: SyntaxError[]) => {
+    setSyntaxErrors(newErrors);
   }, []);
 
-  const syntacticErrorCount = useMemo(() => syntacticParseErrors.length, [
-    syntacticParseErrors,
+  const onSemanticErrorChange = useCallback((newErrors: SemanticError[]) => {
+    setSemanticErrors(newErrors);
+  }, []);
+
+  const onSemanticWarningChange = useCallback(
+    (newErrors: SemanticWarning[]) => {
+      setSemanticWarnings(newErrors);
+    },
+    [],
+  );
+
+  const syntaxErrorCount = useMemo(() => syntaxErrors.length, [
+    syntaxErrors,
+  ]);
+
+  const semanticErrorCount = useMemo(() => semanticErrors.length, [
+    semanticErrors,
+  ]);
+
+  const semanticWarningCount = useMemo(() => semanticWarnings.length, [
+    semanticWarnings,
   ]);
 
   const { handlePrettify } = usePrettier({
@@ -166,19 +198,29 @@ export function App() {
                 code={code}
                 onCodeChange={setCode}
                 onCursorChange={onCursorChange}
-                onParseErrorChange={onParseErrorChange}
+                onSyntaxErrorChange={onSyntaxErrorChange}
+                onSemanticErrorChange={onSemanticErrorChange}
+                onSemanticWarningChange={onSemanticWarningChange}
                 theme={theme}
                 rulerWidth={rulerWidth}
                 autoDisplayCompletions={autoDisplayCompletions}
                 enableLinting={enableLinting}
+                showSyntaxErrors={showSyntaxErrors}
+                showSemanticErrors={showSemanticErrors}
+                showSemanticWarnings={showSemanticWarnings}
               />
             </div>
             <StatusBar
               lineCount={lineCount}
               characterCount={characterCount}
-              syntacticErrorCount={syntacticErrorCount}
+              syntaxErrorCount={syntaxErrorCount}
+              semanticErrorCount={semanticErrorCount}
+              semanticWarningCount={semanticWarningCount}
               cursorPosition={cursorPosition}
               enableLinting={enableLinting}
+              showSyntaxErrors={showSyntaxErrors}
+              showSemanticErrors={showSemanticErrors}
+              showSemanticWarnings={showSemanticWarnings}
             />
           </div>
 
@@ -192,6 +234,12 @@ export function App() {
               onAutoDisplayCompletionsChange={setAutoDisplayCompletions}
               enableLinting={enableLinting}
               onEnableLintingChange={setEnableLinting}
+              showSyntaxErrors={showSyntaxErrors}
+              onShowSyntaxErrorsChange={setShowSyntaxErrors}
+              showSemanticErrors={showSemanticErrors}
+              onShowSemanticErrorsChange={setShowSemanticErrors}
+              showSemanticWarnings={showSemanticWarnings}
+              onShowSemanticWarningsChange={setShowSemanticWarnings}
             />
           </div>
         </ResizableLayout>

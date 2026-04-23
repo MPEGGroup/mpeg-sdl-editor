@@ -10,6 +10,12 @@ interface SettingsProps {
   onAutoDisplayCompletionsChange: (value: boolean) => void;
   enableLinting: boolean;
   onEnableLintingChange: (value: boolean) => void;
+  showSyntaxErrors: boolean;
+  onShowSyntaxErrorsChange?: (value: boolean) => void;
+  showSemanticErrors: boolean;
+  onShowSemanticErrorsChange?: (value: boolean) => void;
+  showSemanticWarnings: boolean;
+  onShowSemanticWarningsChange?: (value: boolean) => void;
 }
 
 export function Settings(
@@ -22,6 +28,12 @@ export function Settings(
     onAutoDisplayCompletionsChange,
     enableLinting,
     onEnableLintingChange,
+    showSyntaxErrors,
+    onShowSyntaxErrorsChange,
+    showSemanticErrors,
+    onShowSemanticErrorsChange,
+    showSemanticWarnings,
+    onShowSemanticWarningsChange,
   }: SettingsProps,
 ) {
   return (
@@ -29,9 +41,9 @@ export function Settings(
       <h2 className="font-bold pb-4">
         Settings
       </h2>
-      <div className="grid grid-cols-[auto_auto] gap-x-3 gap-y-3 items-center justify-start">
-        <span className="text-sm text-right whitespace-nowrap">Theme</span>
-        <div>
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center gap-3">
+          <span className="text-sm whitespace-nowrap">Theme</span>
           <button
             type="button"
             onClick={onToggleTheme}
@@ -59,10 +71,8 @@ export function Settings(
               )}
           </button>
         </div>
-        <span className="text-sm text-right whitespace-nowrap">
-          Prettier Text Width
-        </span>
-        <div>
+        <div className="flex items-center gap-3">
+          <span className="text-sm whitespace-nowrap">Prettier Text Width</span>
           <select
             className="select select-sm border border-base-content/30 rounded-lg bg-transparent w-auto"
             value={rulerWidth}
@@ -75,10 +85,10 @@ export function Settings(
             ))}
           </select>
         </div>
-        <span className="text-sm text-right whitespace-nowrap">
-          Auto-Display Completions
-        </span>
-        <div>
+        <div className="flex items-center gap-3">
+          <span className="text-sm whitespace-nowrap">
+            Auto-Display Completions
+          </span>
           <input
             type="checkbox"
             className="checkbox checkbox-sm border-base-content/30"
@@ -86,16 +96,73 @@ export function Settings(
             onChange={(e) => onAutoDisplayCompletionsChange(e.target.checked)}
           />
         </div>
-        <span className="text-sm text-right whitespace-nowrap">
-          Enable Linting
-        </span>
-        <div>
-          <input
-            type="checkbox"
-            className="checkbox checkbox-sm border-base-content/30"
-            checked={enableLinting}
-            onChange={(e) => onEnableLintingChange(e.target.checked)}
-          />
+        <div className="flex flex-wrap items-start gap-x-3 gap-y-2">
+          <div className="flex items-center gap-3">
+            <span className="text-sm whitespace-nowrap">Enable Linting</span>
+            <input
+              type="checkbox"
+              className="checkbox checkbox-sm border-base-content/30"
+              checked={enableLinting}
+              onChange={(e) => onEnableLintingChange(e.target.checked)}
+            />
+          </div>
+          {enableLinting && (
+            <div className="p-2 border border-base-content/30 rounded-sm">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    className="checkbox checkbox-xs disabled:opacity-50 disabled:cursor-not-allowed"
+                    checked={showSyntaxErrors}
+                    disabled={!enableLinting}
+                    onChange={(e) =>
+                      onShowSyntaxErrorsChange?.(e.target.checked)}
+                  />
+                  <span
+                    className={`text-xs text-left whitespace-nowrap ${
+                      !enableLinting ? "text-base-content/50" : ""
+                    }`}
+                  >
+                    Syntax Errors
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    className="checkbox checkbox-xs disabled:opacity-50 disabled:cursor-not-allowed"
+                    checked={showSemanticErrors}
+                    disabled={!enableLinting}
+                    onChange={(e) =>
+                      onShowSemanticErrorsChange?.(e.target.checked)}
+                  />
+                  <span
+                    className={`text-xs text-left whitespace-nowrap ${
+                      !enableLinting ? "text-base-content/50" : ""
+                    }`}
+                  >
+                    Semantic Errors
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    className="checkbox checkbox-xs disabled:opacity-50 disabled:cursor-not-allowed"
+                    checked={showSemanticWarnings}
+                    disabled={!enableLinting}
+                    onChange={(e) =>
+                      onShowSemanticWarningsChange?.(e.target.checked)}
+                  />
+                  <span
+                    className={`text-xs text-left whitespace-nowrap ${
+                      !enableLinting ? "text-base-content/50" : ""
+                    }`}
+                  >
+                    Semantic Warnings
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

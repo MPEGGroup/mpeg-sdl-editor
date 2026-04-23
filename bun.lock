@@ -9,7 +9,7 @@
         "@codemirror/lint": "6.9.2",
         "@lezer/common": "1.5.0",
         "@lezer/highlight": "1.2.3",
-        "@mpeggroup/mpeg-sdl-parser": "3.0.3",
+        "@mpeggroup/mpeg-sdl-parser": "4.0.0",
         "@types/wicg-file-system-access": "2023.10.7",
         "@uiw/codemirror-theme-vscode": "4.25.4",
         "@uiw/react-codemirror": "4.25.4",
@@ -77,7 +77,7 @@
 
     "@marijn/find-cluster-break": ["@marijn/find-cluster-break@1.0.2", "", {}, "sha512-l0h88YhZFyKdXIFNfSWpyjStDjGHwZ/U7iobcK1cQQD8sejsONdQtTVU+1wVN1PBw40PiiHB1vA5S7VTfQiP9g=="],
 
-    "@mpeggroup/mpeg-sdl-parser": ["@mpeggroup/mpeg-sdl-parser@3.0.3", "https://npm.pkg.github.com/download/@mpeggroup/mpeg-sdl-parser/3.0.3/7794c80265913032fea8dff73ac1287b6c4c91db", { "dependencies": { "@codemirror/language": "6.12.1", "@codemirror/state": "6.5.4", "@lezer/common": "1.5.0", "@lezer/generator": "1.8.0", "@lezer/highlight": "1.2.3", "@lezer/lr": "1.4.7", "prettier": "3.8.0" }, "peerDependencies": { "typescript": "5.9.3" } }, "sha512-YxeD3oC4G2Ybkvgfr+PI94uhJgWhHM85ZhiwqpNATRCGcwW6ofPqwizFxLLx5WoCsZRjkv1ESyiZDZKXXEi49g=="],
+    "@mpeggroup/mpeg-sdl-parser": ["@mpeggroup/mpeg-sdl-parser@4.0.0", "https://npm.pkg.github.com/download/@mpeggroup/mpeg-sdl-parser/4.0.0/4166123a490310d127f5653488b7d8002befd7c6", { "dependencies": { "@codemirror/language": "6.12.1", "@codemirror/state": "6.5.4", "@lezer/common": "1.5.0", "@lezer/generator": "1.8.0", "@lezer/highlight": "1.2.3", "@lezer/lr": "1.4.7", "prettier": "3.8.1" }, "peerDependencies": { "typescript": "5.9.3" } }, "sha512-YIAi7I2yb117Tqo5u35NuQLo9cvLC3ixVbuYPIYIt2zthzf74UzCvJ/OzQLEz8eqAy0lLRd4VTme1ewatRAq+g=="],
 
     "@oven/bun-darwin-aarch64": ["@oven/bun-darwin-aarch64@1.3.0", "", { "os": "darwin", "cpu": "arm64" }, "sha512-WeXSaL29ylJEZMYHHW28QZ6rgAbxQ1KuNSZD9gvd3fPlo0s6s2PglvPArjjP07nmvIK9m4OffN0k4M98O7WmAg=="],
 
@@ -163,7 +163,7 @@
 
     "picocolors": ["picocolors@1.1.1", "", {}, "sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA=="],
 
-    "prettier": ["prettier@3.8.0", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-yEPsovQfpxYfgWNhCfECjG5AQaO+K3dp6XERmOepyPDVqcJm+bjyCVO3pmU+nAPe0N5dDvekfGezt/EIiRe1TA=="],
+    "prettier": ["prettier@3.8.1", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-UOnG6LftzbdaHZcKoPFtOcCKztrQ57WkHDeRD9t/PTQtmT0NHSeWWepj6pS0z/N7+08BHFDQVUrfmfMRcZwbMg=="],
 
     "pretty-format": ["pretty-format@27.5.1", "", { "dependencies": { "ansi-regex": "^5.0.1", "ansi-styles": "^5.0.0", "react-is": "^17.0.1" } }, "sha512-Qb1gy5OrP5+zDf2Bvnzdl3jsTf1qXVMazbvCoKhtKqVs4/YK4ozX4gKQJJVyNe+cajNPn0KoC0MC3FUmaHWEmQ=="],
 

@@ -9,7 +9,9 @@ describe("Editor component", () => {
         code="int a;"
         onCodeChange={() => {}}
         onCursorChange={() => {}}
-        onParseErrorChange={() => {}}
+        onSyntaxErrorChange={() => {}}
+        onSemanticErrorChange={() => {}}
+        onSemanticWarningChange={() => {}}
         theme="light"
         rulerWidth={80}
         autoDisplayCompletions
