@@ -23,7 +23,11 @@ import {
   vscodeLightStyle,
 } from "@uiw/codemirror-theme-vscode";
 import { EditorView } from "@codemirror/view";
-import { SyntacticParseError } from "@mpeggroup/mpeg-sdl-parser";
+import {
+  SemanticError,
+  SemanticWarning,
+  SyntaxError,
+} from "@mpeggroup/mpeg-sdl-parser";
 export { ViewUpdate } from "@codemirror/view";
 import { lintGutter } from "@codemirror/lint";
 import { autocompletion } from "@codemirror/autocomplete";
@@ -43,11 +47,16 @@ interface EditorProps {
   code: string;
   onCodeChange: (code: string) => void;
   onCursorChange: (position: { line: number; col: number }) => void;
-  onParseErrorChange: (syntacticParseErrors: SyntacticParseError[]) => void;
+  onSyntaxErrorChange: (syntaxErrors: SyntaxError[]) => void;
+  onSemanticErrorChange: (syntaxErrors: SemanticError[]) => void;
+  onSemanticWarningChange: (syntaxErrors: SemanticWarning[]) => void;
   theme: "light" | "dark";
   rulerWidth: number;
   autoDisplayCompletions: boolean;
   enableLinting: boolean;
+  showSyntaxErrors: boolean;
+  showSemanticErrors: boolean;
+  showSemanticWarnings: boolean;
 }
 
 export interface EditorRef {
@@ -169,18 +178,28 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
       code,
       onCodeChange,
       onCursorChange,
-      onParseErrorChange,
+      onSyntaxErrorChange,
+      onSemanticErrorChange,
+      onSemanticWarningChange,
       theme,
       rulerWidth,
       autoDisplayCompletions,
       enableLinting,
+      showSyntaxErrors,
+      showSemanticErrors,
+      showSemanticWarnings,
     },
     ref,
   ) => {
     const lastCursorPosition = useRef({ line: 1, col: 1 });
     const editorViewRef = useRef<EditorView | null>(null);
-    const onParseErrorChangeRef = useRef(onParseErrorChange);
-    onParseErrorChangeRef.current = onParseErrorChange;
+    const onSyntaxErrorChangeRef = useRef(onSyntaxErrorChange);
+    const onSemanticErrorChangeRef = useRef(onSemanticErrorChange);
+    const onSemanticWarningChangeRef = useRef(onSemanticWarningChange);
+
+    onSyntaxErrorChangeRef.current = onSyntaxErrorChange;
+    onSemanticErrorChangeRef.current = onSemanticErrorChange;
+    onSemanticWarningChangeRef.current = onSemanticWarningChange;
 
     const sdlLanguageSupport = useMemo(() => sdl(), []);
 
@@ -197,9 +216,23 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
       [autoDisplayCompletions],
     );
 
-    const stableOnParseErrorChange = useCallback(
-      (errors: SyntacticParseError[]) => {
-        onParseErrorChangeRef.current(errors);
+    const stableOnSyntaxErrorChange = useCallback(
+      (errors: SyntaxError[]) => {
+        onSyntaxErrorChangeRef.current(errors);
+      },
+      [],
+    );
+
+    const stableOnSemanticErrorChange = useCallback(
+      (errors: SemanticError[]) => {
+        onSemanticErrorChangeRef.current(errors);
+      },
+      [],
+    );
+
+    const stableOnSemanticWarningChange = useCallback(
+      (errors: SemanticWarning[]) => {
+        onSemanticWarningChangeRef.current(errors);
       },
       [],
     );
@@ -209,11 +242,28 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
       () =>
         enableLinting
           ? [
+            // TODO: only include the lint gutter if showSyntaxErrors, showSemanticErrors, or showSemanticWarnings is true
             lintGutter(),
-            sdlLinter({ onParseErrorChange: stableOnParseErrorChange }),
+            // TODO: pass showSyntaxErrors, showSemanticErrors, showSemanticWarnings to sdlLinter
+            sdlLinter({
+              onSyntaxErrorChange: stableOnSyntaxErrorChange,
+              onSemanticErrorChange: stableOnSemanticErrorChange,
+              onSemanticWarningChange: stableOnSemanticWarningChange,
+              showSyntaxErrors,
+              showSemanticErrors,
+              showSemanticWarnings,
+            }),
           ]
           : [],
-      [enableLinting, stableOnParseErrorChange],
+      [
+        enableLinting,
+        stableOnSyntaxErrorChange,
+        stableOnSemanticErrorChange,
+        stableOnSemanticWarningChange,
+        showSyntaxErrors,
+        showSemanticErrors,
+        showSemanticWarnings,
+      ],
     );
 
     const extensions = useMemo(() => [

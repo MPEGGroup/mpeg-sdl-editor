@@ -1,46 +1,75 @@
 import { syntaxTree } from "@codemirror/language";
 import { type Diagnostic, linter } from "@codemirror/lint";
-import { type SyntaxNodeRef } from "@lezer/common";
 import { type Extension } from "@codemirror/state";
 import {
-  createParseErrorFromTextAndCursor,
-  SyntacticParseError,
+  buildAst,
+  collateSyntaxErrors,
+  createLenientSdlAnalyser,
+  SdlStringInput,
+  SemanticError,
+  SemanticWarning,
+  Specification,
+  SyntaxError,
 } from "@mpeggroup/mpeg-sdl-parser";
 
 interface SdlLinterOptions {
-  onParseErrorChange: (syntacticParseErrors: SyntacticParseError[]) => void;
+  onSyntaxErrorChange: (syntaxErrors: SyntaxError[]) => void;
+  onSemanticErrorChange: (semanticErrors: SemanticError[]) => void;
+  onSemanticWarningChange: (semanticWarnings: SemanticWarning[]) => void;
+  showSyntaxErrors: boolean;
+  showSemanticErrors: boolean;
+  showSemanticWarnings: boolean;
 }
 
 export function sdlLinter(options: SdlLinterOptions): Extension {
   return linter((view) => {
     const diagnostics: Diagnostic[] = [];
-    const errors: SyntacticParseError[] = [];
-    const cursor = syntaxTree(view.state).cursor();
-    const text = view.state.doc;
-    const errorRows = new Set<number>();
+    const sdlParseTree = syntaxTree(view.state);
+    const sdlStringInput = new SdlStringInput(view.state.doc.toString());
+    const syntaxErrors = collateSyntaxErrors(sdlParseTree, sdlStringInput);
+    const specification = buildAst(sdlParseTree, sdlStringInput, true);
+    const analyser = createLenientSdlAnalyser();
+    const analysisResult = analyser.analyse(specification as Specification);
 
-    do {
-      if (cursor.type.isError) {
-        const node: SyntaxNodeRef = cursor.node;
-        const error = createParseErrorFromTextAndCursor(text, cursor);
-
-        if (!errorRows.has(error.location!.row)) {
-          errorRows.add(error.location!.row);
-
-          errors.push(error);
-
-          diagnostics.push({
-            from: node.from,
-            to: node.to,
-            severity: "warning",
-            message: error.errorMessage,
-          });
-        }
+    if (options.showSyntaxErrors) {
+      for (const error of syntaxErrors) {
+        diagnostics.push({
+          from: error.location!.position,
+          to: error.location!.position,
+          severity: "error",
+          message: error.errorMessage,
+        });
       }
-    } while (cursor.next());
+    }
+    if (options.showSemanticErrors) {
+      for (const error of analysisResult.semanticErrors) {
+        diagnostics.push({
+          from: error.location!.position,
+          to: error.location!.position,
+          severity: "error",
+          message: error.errorMessage,
+        });
+      }
+    }
+    if (options.showSemanticWarnings) {
+      for (const warning of analysisResult.semanticWarnings) {
+        diagnostics.push({
+          from: warning.location!.position,
+          to: warning.location!.position,
+          severity: "warning",
+          message: warning.errorMessage,
+        });
+      }
+    }
 
-    if (options.onParseErrorChange) {
-      options.onParseErrorChange(errors);
+    if (options.onSyntaxErrorChange) {
+      options.onSyntaxErrorChange(syntaxErrors);
+    }
+    if (options.onSemanticErrorChange) {
+      options.onSemanticErrorChange(analysisResult.semanticErrors);
+    }
+    if (options.onSemanticWarningChange) {
+      options.onSemanticWarningChange(analysisResult.semanticWarnings);
     }
 
     return diagnostics;
