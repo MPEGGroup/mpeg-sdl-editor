@@ -1,15 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 
 export function useShowSyntaxErrors(defaultValue: boolean = true) {
-  const [showSyntaxErrors, setShowSyntaxErrorsInternal] = useState<boolean>(
-    () => {
-      const stored = localStorage.getItem("showSyntaxErrors");
-      if (stored !== null) {
-        return stored === "true";
-      }
-      return defaultValue;
-    },
-  );
+  const [showSyntaxErrors, setShowSyntaxErrorsInternal] = useState<boolean>(() => {
+    const stored = localStorage.getItem("showSyntaxErrors");
+    if (stored !== null) {
+      return stored === "true";
+    }
+    return defaultValue;
+  });
 
   useEffect(() => {
     localStorage.setItem("showSyntaxErrors", String(showSyntaxErrors));

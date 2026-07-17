@@ -1,10 +1,4 @@
-import {
-  forwardRef,
-  useCallback,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-} from "react";
+import { forwardRef, useCallback, useImperativeHandle, useMemo, useRef } from "react";
 import CodeMirror, { ViewUpdate } from "@uiw/react-codemirror";
 import {
   codeFolding,
@@ -23,11 +17,7 @@ import {
   vscodeLightStyle,
 } from "@uiw/codemirror-theme-vscode";
 import { EditorView } from "@codemirror/view";
-import {
-  SemanticError,
-  SemanticWarning,
-  SyntaxError,
-} from "@mpeggroup/mpeg-sdl-parser";
+import { SemanticError, SemanticWarning, SyntaxError } from "@mpeggroup/mpeg-sdl-parser";
 export { ViewUpdate } from "@codemirror/view";
 import { lintGutter } from "@codemirror/lint";
 import { autocompletion } from "@codemirror/autocomplete";
@@ -72,7 +62,7 @@ function extractThemeStyleAttributes(themeStyle: TagStyle[]) {
     let attributes = "";
 
     Object.keys(style).forEach((key) => {
-      if ((key !== "tag") && (key !== "class")) {
+      if (key !== "tag" && key !== "class") {
         const value = style[key as keyof typeof style];
 
         if (typeof value === "string") {
@@ -89,14 +79,14 @@ function extractThemeStyleAttributes(themeStyle: TagStyle[]) {
       style.tag.forEach((tag) => {
         const actualTag = tag as unknown as TagWithNameAndModified;
 
-        if (actualTag.name && (actualTag.modified.length === 0)) {
+        if (actualTag.name && actualTag.modified.length === 0) {
           styleAttributesByTagName.set(actualTag.name, attributes);
         }
       });
     } else {
       const actualTag = style.tag as unknown as TagWithNameAndModified;
 
-      if (actualTag.name && (actualTag.modified.length === 0)) {
+      if (actualTag.name && actualTag.modified.length === 0) {
         styleAttributesByTagName.set(actualTag.name, attributes);
       }
     }
@@ -105,21 +95,12 @@ function extractThemeStyleAttributes(themeStyle: TagStyle[]) {
   return styleAttributesByTagName;
 }
 
-const lightStyleAttributesByTagName = extractThemeStyleAttributes(
-  vscodeLightStyle,
-);
-const darkStyleAttributesByTagName = extractThemeStyleAttributes(
-  vscodeDarkStyle,
-);
+const lightStyleAttributesByTagName = extractThemeStyleAttributes(vscodeLightStyle);
+const darkStyleAttributesByTagName = extractThemeStyleAttributes(vscodeDarkStyle);
 
-function getStyledCode(
-  sdlLanguageSupport: LanguageSupport,
-  code: string,
-  theme: string,
-): string {
-  const styleAttributesByTagName = theme === "dark"
-    ? darkStyleAttributesByTagName
-    : lightStyleAttributesByTagName;
+function getStyledCode(sdlLanguageSupport: LanguageSupport, code: string, theme: string): string {
+  const styleAttributesByTagName =
+    theme === "dark" ? darkStyleAttributesByTagName : lightStyleAttributesByTagName;
 
   let richText = "";
 
@@ -148,7 +129,10 @@ function getStyledCode(
 
     let span;
     if (spanStyleAttributes) {
-      span = "<span style='" + spanStyleAttributes + "'>" +
+      span =
+        "<span style='" +
+        spanStyleAttributes +
+        "'>" +
         p.innerHTML.replaceAll(" ", "&nbsp;") +
         "</span>";
     } else {
@@ -204,10 +188,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
     const sdlLanguageSupport = useMemo(() => sdl(), []);
 
     // Memoize static extensions that never change
-    const staticExtensions = useMemo(() => [
-      codeFolding(),
-      foldGutter(),
-    ], []);
+    const staticExtensions = useMemo(() => [codeFolding(), foldGutter()], []);
 
     const rulerExtension = useMemo(() => ruler(rulerWidth), [rulerWidth]);
 
@@ -216,44 +197,35 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
       [autoDisplayCompletions],
     );
 
-    const stableOnSyntaxErrorChange = useCallback(
-      (errors: SyntaxError[]) => {
-        onSyntaxErrorChangeRef.current(errors);
-      },
-      [],
-    );
+    const stableOnSyntaxErrorChange = useCallback((errors: SyntaxError[]) => {
+      onSyntaxErrorChangeRef.current(errors);
+    }, []);
 
-    const stableOnSemanticErrorChange = useCallback(
-      (errors: SemanticError[]) => {
-        onSemanticErrorChangeRef.current(errors);
-      },
-      [],
-    );
+    const stableOnSemanticErrorChange = useCallback((errors: SemanticError[]) => {
+      onSemanticErrorChangeRef.current(errors);
+    }, []);
 
-    const stableOnSemanticWarningChange = useCallback(
-      (errors: SemanticWarning[]) => {
-        onSemanticWarningChangeRef.current(errors);
-      },
-      [],
-    );
+    const stableOnSemanticWarningChange = useCallback((errors: SemanticWarning[]) => {
+      onSemanticWarningChangeRef.current(errors);
+    }, []);
 
     // Memoize dynamic extensions that depend on props
     const dynamicExtensions = useMemo(
       () =>
         enableLinting
           ? [
-            // TODO: only include the lint gutter if showSyntaxErrors, showSemanticErrors, or showSemanticWarnings is true
-            lintGutter(),
-            // TODO: pass showSyntaxErrors, showSemanticErrors, showSemanticWarnings to sdlLinter
-            sdlLinter({
-              onSyntaxErrorChange: stableOnSyntaxErrorChange,
-              onSemanticErrorChange: stableOnSemanticErrorChange,
-              onSemanticWarningChange: stableOnSemanticWarningChange,
-              showSyntaxErrors,
-              showSemanticErrors,
-              showSemanticWarnings,
-            }),
-          ]
+              // TODO: only include the lint gutter if showSyntaxErrors, showSemanticErrors, or showSemanticWarnings is true
+              lintGutter(),
+              // TODO: pass showSyntaxErrors, showSemanticErrors, showSemanticWarnings to sdlLinter
+              sdlLinter({
+                onSyntaxErrorChange: stableOnSyntaxErrorChange,
+                onSemanticErrorChange: stableOnSemanticErrorChange,
+                onSemanticWarningChange: stableOnSemanticWarningChange,
+                showSyntaxErrors,
+                showSemanticErrors,
+                showSemanticWarnings,
+              }),
+            ]
           : [],
       [
         enableLinting,
@@ -266,19 +238,22 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
       ],
     );
 
-    const extensions = useMemo(() => [
-      ...staticExtensions,
-      rulerExtension,
-      autocompletionExtension,
-      sdlLanguageSupport,
-      ...dynamicExtensions,
-    ], [
-      staticExtensions,
-      rulerExtension,
-      autocompletionExtension,
-      sdlLanguageSupport,
-      dynamicExtensions,
-    ]);
+    const extensions = useMemo(
+      () => [
+        ...staticExtensions,
+        rulerExtension,
+        autocompletionExtension,
+        sdlLanguageSupport,
+        ...dynamicExtensions,
+      ],
+      [
+        staticExtensions,
+        rulerExtension,
+        autocompletionExtension,
+        sdlLanguageSupport,
+        dynamicExtensions,
+      ],
+    );
 
     // Memoize imperative methods
     const expandAll = useCallback(() => {
@@ -308,41 +283,51 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
     }, []);
 
     // Expose methods via ref
-    useImperativeHandle(ref, () => ({
-      expandAll,
-      collapseAll,
-      getStyledCode: () => {
-        return getStyledCode(sdlLanguageSupport, code, theme);
+    useImperativeHandle(
+      ref,
+      () => ({
+        expandAll,
+        collapseAll,
+        getStyledCode: () => {
+          return getStyledCode(sdlLanguageSupport, code, theme);
+        },
+      }),
+      [expandAll, collapseAll, sdlLanguageSupport, code, theme],
+    );
+
+    const onInternalCodeChange = useCallback(
+      (newCode: string) => {
+        onCodeChange(newCode);
       },
-    }), [expandAll, collapseAll, sdlLanguageSupport, code, theme]);
+      [onCodeChange],
+    );
 
-    const onInternalCodeChange = useCallback((newCode: string) => {
-      onCodeChange(newCode);
-    }, [onCodeChange]);
+    const onViewUpdate = useCallback(
+      (viewUpdate: ViewUpdate) => {
+        if (viewUpdate.state) {
+          const state = viewUpdate.state;
+          const selection = state.selection.main;
 
-    const onViewUpdate = useCallback((viewUpdate: ViewUpdate) => {
-      if (viewUpdate.state) {
-        const state = viewUpdate.state;
-        const selection = state.selection.main;
+          if (selection) {
+            const head = selection.head;
+            const line = state.doc.lineAt(head);
+            const lineNumber = line.number;
+            const columnNumber = head - line.from + 1;
 
-        if (selection) {
-          const head = selection.head;
-          const line = state.doc.lineAt(head);
-          const lineNumber = line.number;
-          const columnNumber = head - line.from + 1;
-
-          // Only update if position actually changed
-          if (
-            lastCursorPosition.current.line !== lineNumber ||
-            lastCursorPosition.current.col !== columnNumber
-          ) {
-            const newPosition = { line: lineNumber, col: columnNumber };
-            lastCursorPosition.current = newPosition;
-            onCursorChange(newPosition);
+            // Only update if position actually changed
+            if (
+              lastCursorPosition.current.line !== lineNumber ||
+              lastCursorPosition.current.col !== columnNumber
+            ) {
+              const newPosition = { line: lineNumber, col: columnNumber };
+              lastCursorPosition.current = newPosition;
+              onCursorChange(newPosition);
+            }
           }
         }
-      }
-    }, [onCursorChange]);
+      },
+      [onCursorChange],
+    );
 
     return (
       <div className="h-full w-full">

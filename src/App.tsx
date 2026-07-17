@@ -1,8 +1,4 @@
-import {
-  SemanticError,
-  SemanticWarning,
-  SyntaxError,
-} from "@mpeggroup/mpeg-sdl-parser";
+import { SemanticError, SemanticWarning, SyntaxError } from "@mpeggroup/mpeg-sdl-parser";
 import { Editor } from "./components/Editor.tsx";
 import type { EditorRef } from "./components/Editor.tsx";
 import { Navbar } from "./components/Navbar.tsx";
@@ -36,12 +32,9 @@ function getInitialCodeFromHash(): string | null {
 }
 
 export function App() {
-  const defaultCode =
-    "// Start typing your SDL here... <Ctrl+Space> for completions\n";
+  const defaultCode = "// Start typing your SDL here... <Ctrl+Space> for completions\n";
 
-  const [code, setCodeInternal] = useState<string>(
-    () => getInitialCodeFromHash() ?? defaultCode,
-  );
+  const [code, setCodeInternal] = useState<string>(() => getInitialCodeFromHash() ?? defaultCode);
 
   const setCode = useCallback((newCode: string) => {
     setCodeInternal(newCode);
@@ -62,34 +55,29 @@ export function App() {
   const isMobile = useMobileDetection();
   const [isSettingsShown, setSettingsShown] = useState(false);
   const { rulerWidth, setRulerWidth } = useRulerWidth();
-  const { autoDisplayCompletions, setAutoDisplayCompletions } =
-    useAutoDisplayCompletions();
+  const { autoDisplayCompletions, setAutoDisplayCompletions } = useAutoDisplayCompletions();
   const { enableLinting, setEnableLinting } = useEnableLinting();
   const { showSyntaxErrors, setShowSyntaxErrors } = useShowSyntaxErrors();
   const { showSemanticErrors, setShowSemanticErrors } = useShowSemanticErrors();
-  const { showSemanticWarnings, setShowSemanticWarnings } =
-    useShowSemanticWarnings();
-  const [cursorPosition, setCursorPosition] = useState<
-    { line: number; col: number }
-  >({ line: 1, col: 1 });
+  const { showSemanticWarnings, setShowSemanticWarnings } = useShowSemanticWarnings();
+  const [cursorPosition, setCursorPosition] = useState<{ line: number; col: number }>({
+    line: 1,
+    col: 1,
+  });
   const editorRef = useRef<EditorRef>(null);
 
-  const onCursorChange = useCallback(
-    (position: { line: number; col: number }) => {
-      setCursorPosition((prev) => {
-        // Only update if position actually changed
-        if (prev.line !== position.line || prev.col !== position.col) {
-          return position;
-        }
-        return prev;
-      });
-    },
-    [],
-  );
+  const onCursorChange = useCallback((position: { line: number; col: number }) => {
+    setCursorPosition((prev) => {
+      // Only update if position actually changed
+      if (prev.line !== position.line || prev.col !== position.col) {
+        return position;
+      }
+      return prev;
+    });
+  }, []);
   const handleShare = useCallback(async () => {
     const encoded = btoa(code);
-    const url =
-      `${globalThis.location.origin}${globalThis.location.pathname}#c=${encoded}`;
+    const url = `${globalThis.location.origin}${globalThis.location.pathname}#c=${encoded}`;
     try {
       await navigator.clipboard.writeText(url);
       showToast("URL copied!");
@@ -98,11 +86,7 @@ export function App() {
     }
   }, [code, showToast]);
 
-  const {
-    handleSave,
-    handleLoad,
-    handleCopy,
-  } = useFileOperations({
+  const { handleSave, handleLoad, handleCopy } = useFileOperations({
     code,
     setCode,
     showToast,
@@ -113,9 +97,7 @@ export function App() {
   const characterCount = useMemo(() => code.length, [code]);
   const [syntaxErrors, setSyntaxErrors] = useState<SyntaxError[]>([]);
   const [semanticErrors, setSemanticErrors] = useState<SemanticError[]>([]);
-  const [semanticWarnings, setSemanticWarnings] = useState<SemanticWarning[]>(
-    [],
-  );
+  const [semanticWarnings, setSemanticWarnings] = useState<SemanticWarning[]>([]);
 
   const onSyntaxErrorChange = useCallback((newErrors: SyntaxError[]) => {
     setSyntaxErrors(newErrors);
@@ -125,24 +107,15 @@ export function App() {
     setSemanticErrors(newErrors);
   }, []);
 
-  const onSemanticWarningChange = useCallback(
-    (newErrors: SemanticWarning[]) => {
-      setSemanticWarnings(newErrors);
-    },
-    [],
-  );
+  const onSemanticWarningChange = useCallback((newErrors: SemanticWarning[]) => {
+    setSemanticWarnings(newErrors);
+  }, []);
 
-  const syntaxErrorCount = useMemo(() => syntaxErrors.length, [
-    syntaxErrors,
-  ]);
+  const syntaxErrorCount = useMemo(() => syntaxErrors.length, [syntaxErrors]);
 
-  const semanticErrorCount = useMemo(() => semanticErrors.length, [
-    semanticErrors,
-  ]);
+  const semanticErrorCount = useMemo(() => semanticErrors.length, [semanticErrors]);
 
-  const semanticWarningCount = useMemo(() => semanticWarnings.length, [
-    semanticWarnings,
-  ]);
+  const semanticWarningCount = useMemo(() => semanticWarnings.length, [semanticWarnings]);
 
   const { handlePrettify } = usePrettier({
     code,
@@ -251,8 +224,8 @@ export function App() {
               toastState.type === "success"
                 ? "alert-success"
                 : toastState.type === "warning"
-                ? "alert-warning"
-                : "alert-error"
+                  ? "alert-warning"
+                  : "alert-error"
             }`}
           >
             <span>{toastState.message}</span>

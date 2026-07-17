@@ -44,8 +44,7 @@ export function DesktopPanels({
                   ? "bg-primary-content h-16"
                   : "group-hover:bg-base-content/50 group-hover:h-16"
               }`}
-            >
-            </div>
+            ></div>
           </div>
         </div>
       )}
@@ -53,10 +52,7 @@ export function DesktopPanels({
       {/* Right panel - only show when not collapsed */}
 
       {isSettingsShown && (
-        <div
-          className="flex flex-col"
-          style={{ width: `${Math.max(100 - splitPercentage, 5)}%` }}
-        >
+        <div className="flex flex-col" style={{ width: `${Math.max(100 - splitPercentage, 5)}%` }}>
           {rightChild}
         </div>
       )}

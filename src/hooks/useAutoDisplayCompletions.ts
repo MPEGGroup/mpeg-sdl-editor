@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 export function useAutoDisplayCompletions(defaultValue: boolean = true) {
-  const [autoDisplayCompletions, setAutoDisplayCompletionsInternal] = useState<
-    boolean
-  >(() => {
+  const [autoDisplayCompletions, setAutoDisplayCompletionsInternal] = useState<boolean>(() => {
     const stored = localStorage.getItem("autoDisplayCompletions");
     if (stored !== null) {
       return stored === "true";
@@ -12,10 +10,7 @@ export function useAutoDisplayCompletions(defaultValue: boolean = true) {
   });
 
   useEffect(() => {
-    localStorage.setItem(
-      "autoDisplayCompletions",
-      String(autoDisplayCompletions),
-    );
+    localStorage.setItem("autoDisplayCompletions", String(autoDisplayCompletions));
   }, [autoDisplayCompletions]);
 
   const setAutoDisplayCompletions = useCallback((value: boolean) => {

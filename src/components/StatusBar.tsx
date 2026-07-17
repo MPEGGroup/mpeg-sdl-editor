@@ -28,12 +28,8 @@ export function StatusBar({
       <div className="flex items-center space-x-4">
         <span>Lines: {lineCount}</span>
         <span>Characters: {characterCount}</span>
-        {enableLinting && showSyntaxErrors && (
-          <span>Syntax Errors: {syntaxErrorCount}</span>
-        )}
-        {enableLinting && showSemanticErrors && (
-          <span>Semantic Errors: {semanticErrorCount}</span>
-        )}
+        {enableLinting && showSyntaxErrors && <span>Syntax Errors: {syntaxErrorCount}</span>}
+        {enableLinting && showSemanticErrors && <span>Semantic Errors: {semanticErrorCount}</span>}
         {enableLinting && showSemanticWarnings && (
           <span>Semantic Warnings: {semanticWarningCount}</span>
         )}
