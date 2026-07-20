@@ -9,9 +9,7 @@ interface UseFileOperationsProps {
   editorRef: React.RefObject<EditorRef | null>;
 }
 
-export function useFileOperations(
-  { code, setCode, showToast, editorRef }: UseFileOperationsProps,
-) {
+export function useFileOperations({ code, setCode, showToast, editorRef }: UseFileOperationsProps) {
   const handleSave = useCallback(async () => {
     try {
       if (globalThis.window.showSaveFilePicker) {

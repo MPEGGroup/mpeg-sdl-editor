@@ -1,13 +1,9 @@
 const tailwindConfig: import("tailwindcss").Config & { daisyui?: any } = {
-  content: [
-    "./src/**/*.{html,js,jsx,ts,tsx}",
-  ],
+  content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
   theme: {
     extend: {},
   },
-  plugins: [
-    require("daisyui"),
-  ],
+  plugins: [require("daisyui")],
   daisyui: {
     themes: ["light", "dark"],
   },

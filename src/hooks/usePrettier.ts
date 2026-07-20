@@ -10,9 +10,7 @@ interface UsePrettierProps {
   rulerWidth: number;
 }
 
-export function usePrettier(
-  { code, setCode, showToast, rulerWidth }: UsePrettierProps,
-) {
+export function usePrettier({ code, setCode, showToast, rulerWidth }: UsePrettierProps) {
   const prettifyInProgressRef = useRef(false);
 
   const handlePrettify = useCallback(async () => {

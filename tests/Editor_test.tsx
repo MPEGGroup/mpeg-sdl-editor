@@ -21,9 +21,7 @@ describe("Editor component", () => {
     const textboxes = getAllByRole("textbox");
 
     // Check that at least one textbox contains the expected content
-    const found = textboxes.some(
-      (el) => el.textContent && el.textContent.includes("int a;"),
-    );
+    const found = textboxes.some((el) => el.textContent && el.textContent.includes("int a;"));
     expect(found).toBe(true);
   });
 });

@@ -1,11 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 export type ToastType = "success" | "warning" | "error";
-export type ShowToastFunction = (
-  message: string,
-  type?: ToastType,
-  duration?: number,
-) => void;
+export type ShowToastFunction = (message: string, type?: ToastType, duration?: number) => void;
 
 interface ToastState {
   message: string;

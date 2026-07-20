@@ -1,10 +1,5 @@
 import { syntaxTree } from "@codemirror/language";
-import {
-  type Diagnostic,
-  forEachDiagnostic,
-  linter,
-  setDiagnostics,
-} from "@codemirror/lint";
+import { type Diagnostic, forEachDiagnostic, linter, setDiagnostics } from "@codemirror/lint";
 import { type Extension } from "@codemirror/state";
 import { EditorView, ViewPlugin, type ViewUpdate } from "@codemirror/view";
 import {

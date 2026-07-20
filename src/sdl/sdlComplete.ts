@@ -1,14 +1,8 @@
-import {
-  CompletionContext,
-  type CompletionResult,
-} from "@codemirror/autocomplete";
+import { CompletionContext, type CompletionResult } from "@codemirror/autocomplete";
 import type { SyntaxNode } from "@lezer/common";
 import { syntaxTree } from "@codemirror/language";
 import { foldNodeProp } from "@codemirror/language";
-import {
-  getPotentialSyntacticTokens,
-  TokenTypeId,
-} from "@mpeggroup/mpeg-sdl-parser";
+import { getPotentialSyntacticTokens, TokenTypeId } from "@mpeggroup/mpeg-sdl-parser";
 
 function isCommentCompletion(lastNode: SyntaxNode): boolean {
   return lastNode.type.id === TokenTypeId.Comment;
@@ -37,10 +31,7 @@ function isBlockScopeCompletion(lastNode: SyntaxNode): boolean {
   return parentNode.type.prop(foldNodeProp) !== undefined;
 }
 
-function getCompletionResult(
-  completionOptions: string[],
-  from: number,
-): CompletionResult {
+function getCompletionResult(completionOptions: string[], from: number): CompletionResult {
   return {
     from,
     options: completionOptions.map((label) => ({ label })),
@@ -73,11 +64,8 @@ function sdlComplete(context: CompletionContext): CompletionResult | null {
 
   const completions = getPotentialSyntacticTokens(lastNode.cursor());
 
-  if (completions && (completions.length > 0)) {
-    return getCompletionResult(
-      completions,
-      lastTag ? lastNode.from + lastTag.index : context.pos,
-    );
+  if (completions && completions.length > 0) {
+    return getCompletionResult(completions, lastTag ? lastNode.from + lastTag.index : context.pos);
   }
 
   return null;

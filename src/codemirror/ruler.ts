@@ -7,7 +7,7 @@ const baseTheme = EditorView.baseTheme({
 });
 
 const rulerWidth = Facet.define<number, number>({
-  combine: (values) => values.length ? Math.min(...values) : 10,
+  combine: (values) => (values.length ? Math.min(...values) : 10),
 });
 
 const showRuler = ViewPlugin.fromClass(
@@ -38,9 +38,7 @@ const showRuler = ViewPlugin.fromClass(
       const defaultCharacterWidth = view.defaultCharacterWidth;
       const gutterWidth = view.contentDOM.getBoundingClientRect().x;
 
-      this.rulerDiv.style.left = `${
-        gutterWidth + (column * defaultCharacterWidth) + 6
-      }px`;
+      this.rulerDiv.style.left = `${gutterWidth + column * defaultCharacterWidth + 6}px`;
     }
 
     destroy() {
@@ -50,9 +48,5 @@ const showRuler = ViewPlugin.fromClass(
 );
 
 export function ruler(column: number): Extension {
-  return [
-    baseTheme,
-    rulerWidth.of(column),
-    showRuler,
-  ];
+  return [baseTheme, rulerWidth.of(column), showRuler];
 }

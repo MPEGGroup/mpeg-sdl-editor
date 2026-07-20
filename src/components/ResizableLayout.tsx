@@ -38,32 +38,28 @@ export function ResizableLayout({
 
   return (
     <div ref={containerRef} className="flex h-full w-full relative">
-      {isMobile
-        ? (
-          <>
-            <div className="flex flex-col w-full">
-              {children[0]}
-            </div>
+      {isMobile ? (
+        <>
+          <div className="flex flex-col w-full">{children[0]}</div>
 
-            <MobileDrawer
-              theme={theme}
-              isSettingsShown={isSettingsShown}
-              onToggleSettings={onToggleSettings}
-            >
-              {children[1]}
-            </MobileDrawer>
-          </>
-        )
-        : (
-          <DesktopPanels
-            leftChild={children[0]}
-            rightChild={children[1]}
-            splitPercentage={splitPercentage}
+          <MobileDrawer
+            theme={theme}
             isSettingsShown={isSettingsShown}
-            isDragging={isDragging}
-            onMouseDown={handleMouseDown}
-          />
-        )}
+            onToggleSettings={onToggleSettings}
+          >
+            {children[1]}
+          </MobileDrawer>
+        </>
+      ) : (
+        <DesktopPanels
+          leftChild={children[0]}
+          rightChild={children[1]}
+          splitPercentage={splitPercentage}
+          isSettingsShown={isSettingsShown}
+          isDragging={isDragging}
+          onMouseDown={handleMouseDown}
+        />
+      )}
     </div>
   );
 }

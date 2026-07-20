@@ -7,12 +7,7 @@ interface SubNavProps {
   onPrettify: () => void;
 }
 
-export function SubNav({
-  theme,
-  onCollapseAll,
-  onExpandAll,
-  onPrettify,
-}: SubNavProps) {
+export function SubNav({ theme, onCollapseAll, onExpandAll, onPrettify }: SubNavProps) {
   return (
     <div
       className={`border-b border-base-300 px-2 py-1.5 flex items-center justify-between text-xs min-h-8 ${

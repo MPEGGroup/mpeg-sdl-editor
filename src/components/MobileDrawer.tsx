@@ -8,9 +8,12 @@ interface MobileDrawerProps {
   children: React.ReactNode;
 }
 
-export function MobileDrawer(
-  { theme, isSettingsShown, onToggleSettings, children }: MobileDrawerProps,
-) {
+export function MobileDrawer({
+  theme,
+  isSettingsShown,
+  onToggleSettings,
+  children,
+}: MobileDrawerProps) {
   return (
     <>
       {isSettingsShown && (
@@ -32,12 +35,7 @@ export function MobileDrawer(
           }`}
           title="Close settings"
         >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -47,9 +45,7 @@ export function MobileDrawer(
           </svg>
         </button>
         <div className="h-full p-4 pt-4 overflow-hidden">
-          <div className="overflow-y-auto h-full">
-            {children}
-          </div>
+          <div className="overflow-y-auto h-full">{children}</div>
         </div>
       </div>
     </>

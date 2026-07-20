@@ -1,26 +1,40 @@
 {
   "name": "@mpeggroup/mpeg-sdl-editor",
+  "version": "1.4.2",
   "description": "ISO/IEC 14496-34 Syntactic Description Language (MPEG SDL) web based editor",
+  "keywords": [
+    "bun",
+    "editor",
+    "mpeg",
+    "parser",
+    "sdl"
+  ],
   "homepage": "https://github.com/MPEGGroup/mpeg-sdl-editor#readme",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MPEGGroup/mpeg-sdl-editor.git"
   },
-  "license": "MIT",
-  "keywords": [
-    "bun",
-    "mpeg",
-    "sdl",
-    "parser",
-    "editor"
-  ],
   "type": "module",
-  "version": "1.4.2",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "bun build.ts"
   },
-  "publishConfig": {
-    "access": "public"
+  "dependencies": {
+    "@codemirror/language": "6.12.1",
+    "@codemirror/lint": "6.9.2",
+    "@lezer/common": "1.5.0",
+    "@lezer/highlight": "1.2.3",
+    "@mpeggroup/mpeg-sdl-parser": "4.1.4",
+    "@types/wicg-file-system-access": "2023.10.7",
+    "@uiw/codemirror-theme-vscode": "4.25.10",
+    "@uiw/react-codemirror": "4.25.10",
+    "daisyui": "5.5.20",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "tailwindcss": "4.3.0"
   },
   "devDependencies": {
     "@happy-dom/global-registrator": "20.9.0",
@@ -31,23 +45,9 @@
     "happy-dom": "20.9.0"
   },
   "peerDependencies": {
-    "typescript": "6.0.3",
     "@types/react": "19.2.15",
-    "@types/react-dom": "19.2.3"
-  },
-  "dependencies": {
-    "@codemirror/language": "6.12.1",
-    "@codemirror/lint": "6.9.2",
-    "@lezer/common": "1.5.0",
-    "@lezer/highlight": "1.2.3",
-    "@mpeggroup/mpeg-sdl-parser": "4.1.2",
-    "@types/wicg-file-system-access": "2023.10.7",
-    "@uiw/codemirror-theme-vscode": "4.25.10",
-    "@uiw/react-codemirror": "4.25.10",
-    "daisyui": "5.5.20",
-    "react": "19.2.6",
-    "react-dom": "19.2.6",
-    "tailwindcss": "4.3.0"
+    "@types/react-dom": "19.2.3",
+    "typescript": "6.0.3"
   },
   "overrides": {
     "@codemirror/language": "6.12.1",
