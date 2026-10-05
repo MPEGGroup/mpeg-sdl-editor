@@ -1,6 +1,6 @@
 {
   "name": "@mpeggroup/mpeg-sdl-editor",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "description": "ISO/IEC 14496-34 Syntactic Description Language (MPEG SDL) web based editor",
   "keywords": [
     "bun",
